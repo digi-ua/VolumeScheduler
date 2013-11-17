@@ -41,21 +41,20 @@ public class MainService extends Service {
 	  
 	  class MainRun implements Runnable {
 		  
-	    Calendar next_time;
-	    Calendar curr_time;
+	    long next_time;
+	    long curr_time;
 	    int curr_volume;
 	    
 	    public MainRun() {
-	    	Log.d(LOG_TAG, "MainRun create");
-	      GetCurrentTime(curr_time);
-	      //curr_volume = GetCurrentVolume(curr_time);
-	      SetVolume(curr_volume);
-	      //next time = ReadNextTime(curr_time);
 	      
+	      GetCurrentTime(curr_time);
+	      //curr_volume = GetCurrentVolume(curr_time);//from xml
+	      SetVolume(curr_volume);
+	      //next time = ReadNextTime(curr_time);//from xml	      
 	    }
 	    
 	    public void run() {
-	      Log.d(LOG_TAG, "MainRun start");
+	      
 	      try {
 	    	  for(int i = 0;;i++)
 	    	  {
@@ -79,20 +78,24 @@ public class MainService extends Service {
 	    }
 	    */
 	    
-	    private void GetCurrentTime(Calendar cl)
+	    private void GetCurrentTime(long cl)
 	    {
-	    	cl = Calendar.getInstance(); 
-	    	Log.d(LOG_TAG, "GetCurrentTime in millis:" + cl.getTimeInMillis());	    	
+	    	cl = Calendar.getInstance().getTimeInMillis(); 
+	    	Log.d(LOG_TAG, "GetCurrentTime in millis:" + cl);
 	    	
+	    	//cl.set(2013, 10, 17, 20, 16);  //mounth -= 1; !!
+	    	//Log.d(LOG_TAG, "GetCurrentTime in millis:" + cl.getTimeInMillis());
+	    	    
 	    	/*
+	    	cl.set(year, month, day, hourOfDay, minute);
 	    	long millis = cl.getTimeInMillis();
 	    	Calendar cl1 = null;
 	    	cl1.setTimeInMillis(millis);
 	    	
 	    	int millisecond = cl.get(Calendar.MILLISECOND);
 	    	int second = cl.get(Calendar.SECOND);
-	    	int minute = cl.get(Calendar.MINUTE);//12 hour format	    	      
-	    	int hour = cl.get(Calendar.HOUR);	    	     
+	    	int minute = cl.get(Calendar.MINUTE);	    	      
+	    	int hour = cl.get(Calendar.HOUR);	//12 hour format    	     
 	    	int hourofday = cl.get(Calendar.HOUR_OF_DAY);//24 hour format
 	    	int dayofyear = cl.get(Calendar.DAY_OF_YEAR);
 	    	int year = cl.get(Calendar.YEAR);
@@ -109,9 +112,7 @@ public class MainService extends Service {
 	    
 	    private int GetCurrentVolume()
 	    {
-	    	AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-	    	//Log.d(LOG_TAG, "GetCurrentVolume:" + audio.getStreamVolume(AudioManager.STREAM_MUSIC));
-	    	//Log.d(LOG_TAG, "GetMaxVolume:" + audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC));	    
+	    	AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);	    
 	    	return audio.getStreamVolume(AudioManager.STREAM_MUSIC);
 	    }
 	  

@@ -2,22 +2,15 @@
 <timetable>
     <item>
 		<id></id>
-	    <time>1384703495345</time>
-        <volume></volume>
+	    <s_time>1384703495345</s_time>
+	    <e_time>1384703495371</e_time>
+        <volume>8</volume>
     </item>
     <item>
 		<id></id>
-	    <time>1384703495371</time>
-        <volume></volume>
+	    <s_time>1384703555392</s_time>
+	    <e_time>1384703565592</e_time>
+        <volume>0</volume>
     </item>
-    <item>
-		<id></id>
-	    <time>1384703555392</time>
-        <volume></volume>
-    </item>
-    <item>
-		<id></id>
-	    <time></time>
-        <volume></volume>
-    </item>
+    
 </timetable>
