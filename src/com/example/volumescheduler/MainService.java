@@ -6,7 +6,9 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -41,14 +43,14 @@ public class MainService extends Service {
 		  
 	    Calendar next_time;
 	    Calendar curr_time;
-	    int curr_volume;//type
+	    int curr_volume;
 	    
 	    public MainRun() {
 	    	Log.d(LOG_TAG, "MainRun create");
 	      GetCurrentTime(curr_time);
-	      //curr_volume = ReadCurrentVolume(curr_time);
-	      //SetCurrentProp(curr_volume);
-	      //next time = ReadNextTime();
+	      //curr_volume = GetCurrentVolume(curr_time);
+	      SetVolume(curr_volume);
+	      //next time = ReadNextTime(curr_time);
 	      
 	    }
 	    
@@ -60,12 +62,12 @@ public class MainService extends Service {
 		    	  GetCurrentTime(curr_time);
 		    	  //if(curr_time >= next_time)
 		    	  //{
-		    	  //	curr_volume = ReadCurrentProp();
-			      //	SetCurrentProp(curr_volume); 
-			      //	next time = ReadNextTime();
+		    	  //	curr_volume = GetCurrentVolume(curr_time);//from xml
+			      //	SetVolume(curr_volume);
+			      //	next time = ReadNextTime(curr_time);//from xml
 		    	  //}
 	    		  Log.d(LOG_TAG, "MainRun cicle #" + i);
-		    	  TimeUnit.SECONDS.sleep(60);		    	  
+		    	  TimeUnit.SECONDS.sleep(20);		    	  
 			  }	      
 	      }catch (InterruptedException e) {e.printStackTrace();}
 	    }
@@ -80,7 +82,13 @@ public class MainService extends Service {
 	    private void GetCurrentTime(Calendar cl)
 	    {
 	    	cl = Calendar.getInstance(); 
+	    	Log.d(LOG_TAG, "GetCurrentTime in millis:" + cl.getTimeInMillis());	    	
+	    	
 	    	/*
+	    	long millis = cl.getTimeInMillis();
+	    	Calendar cl1 = null;
+	    	cl1.setTimeInMillis(millis);
+	    	
 	    	int millisecond = cl.get(Calendar.MILLISECOND);
 	    	int second = cl.get(Calendar.SECOND);
 	    	int minute = cl.get(Calendar.MINUTE);//12 hour format	    	      
@@ -93,5 +101,19 @@ public class MainService extends Service {
 	    	*/
 	    }
 	    
+	    private void SetVolume(int volume)
+	    {
+	    	AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+	    	audio.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+	    }
+	    
+	    private int GetCurrentVolume()
+	    {
+	    	AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+	    	//Log.d(LOG_TAG, "GetCurrentVolume:" + audio.getStreamVolume(AudioManager.STREAM_MUSIC));
+	    	//Log.d(LOG_TAG, "GetMaxVolume:" + audio.getStreamMaxVolume(AudioManager.STREAM_MUSIC));	    
+	    	return audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+	    }
+	  
 	  }	
 }
