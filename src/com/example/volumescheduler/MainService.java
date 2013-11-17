@@ -10,26 +10,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.IBinder;
-import android.util.Log;
 
 public class MainService extends Service {
-	
-	  final String LOG_TAG = "myLogs";
+		  
 	  ExecutorService es;	  
 	  
 	  public void onCreate() {
-	    super.onCreate();
-	    Log.d(LOG_TAG, "MainService onCreate");
+	    super.onCreate();	    
 	    es = Executors.newFixedThreadPool(1);
 	  }
 	  
 	  public void onDestroy() {
-	    super.onDestroy();
-	    Log.d(LOG_TAG, "MainService onDestroy");	    
+	    super.onDestroy();	    	    
 	  }
 
 	  public int onStartCommand(Intent intent, int flags, int startId) {
-	    Log.d(LOG_TAG, "MainService onStartCommand");	    	    
 	    MainRun mr = new MainRun();
 	    es.execute(mr);
 	    return super.onStartCommand(intent, flags, startId);
@@ -40,17 +35,20 @@ public class MainService extends Service {
 	  }
 	  
 	  class MainRun implements Runnable {
-		  
-	    long next_time;
-	    long curr_time;
+
+	    //long next_time;
+	    Calendar curr_time;
 	    int curr_volume;
-	    
+
 	    public MainRun() {
-	      
+
 	      GetCurrentTime(curr_time);
-	      //curr_volume = GetCurrentVolume(curr_time);//from xml
-	      SetVolume(curr_volume);
-	      //next time = ReadNextTime(curr_time);//from xml	      
+	      //curr_volume = GetCurrentVolume(curr_time);
+	      // якщо існує правило на даний час - взяти опції звуку, в іншому випадку -1
+	      if(curr_volume != -1)
+	    	  SetVolume(curr_volume);
+	      //next time = ReadNextTime(curr_time);
+	      //взяти найближчий час(початок нового правила чи кінець поточного)	      
 	    }
 	    
 	    public void run() {
@@ -59,61 +57,43 @@ public class MainService extends Service {
 	    	  for(int i = 0;;i++)
 	    	  {
 		    	  GetCurrentTime(curr_time);
-		    	  //if(curr_time >= next_time)
+		    	  //if(curr_time >= next_time) //якщо настав час зміни правила
 		    	  //{
-		    	  //	curr_volume = GetCurrentVolume(curr_time);//from xml
-			      //	SetVolume(curr_volume);
-			      //	next time = ReadNextTime(curr_time);//from xml
-		    	  //}
-	    		  Log.d(LOG_TAG, "MainRun cicle #" + i);
+		    	  //	curr_volume = GetCurrentVolume(curr_time);
+		    	  //	if(curr_volume != -1)
+			      //		SetVolume(curr_volume);
+			      //	next time = ReadNextTime(curr_time);
+		    	  //}	    		  
 		    	  TimeUnit.SECONDS.sleep(20);		    	  
 			  }	      
 	      }catch (InterruptedException e) {e.printStackTrace();}
 	    }
+
 	    
-	    /*
-	    void stop() {
-	      Log.d(LOG_TAG, "MyRun# stopSelf");
-	      stopSelf();
-	    }
-	    */
-	    
-	    private void GetCurrentTime(long cl)
+	    private void GetCurrentTime(Calendar cl)
 	    {
-	    	cl = Calendar.getInstance().getTimeInMillis(); 
-	    	Log.d(LOG_TAG, "GetCurrentTime in millis:" + cl);
-	    	
+	    	cl = Calendar.getInstance();
+    	
 	    	//cl.set(2013, 10, 17, 20, 16);  //mounth -= 1; !!
-	    	//Log.d(LOG_TAG, "GetCurrentTime in millis:" + cl.getTimeInMillis());
-	    	    
 	    	/*
 	    	cl.set(year, month, day, hourOfDay, minute);
 	    	long millis = cl.getTimeInMillis();
 	    	Calendar cl1 = null;
-	    	cl1.setTimeInMillis(millis);
-	    	
+	    	cl1.setTimeInMillis(millis);	    	
 	    	int millisecond = cl.get(Calendar.MILLISECOND);
-	    	int second = cl.get(Calendar.SECOND);
-	    	int minute = cl.get(Calendar.MINUTE);	    	      
-	    	int hour = cl.get(Calendar.HOUR);	//12 hour format    	     
-	    	int hourofday = cl.get(Calendar.HOUR_OF_DAY);//24 hour format
-	    	int dayofyear = cl.get(Calendar.DAY_OF_YEAR);
-	    	int year = cl.get(Calendar.YEAR);
-	    	int dayofweek = cl.get(Calendar.DAY_OF_WEEK);
-	    	int dayofmonth = cl.get(Calendar.DAY_OF_MONTH);
 	    	*/
 	    }
 	    
 	    private void SetVolume(int volume)
 	    {
 	    	AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-	    	audio.setStreamVolume(AudioManager.STREAM_MUSIC, volume, 0);
+	    	audio.setStreamVolume(AudioManager.STREAM_RING, volume, 0);
 	    }
 	    
 	    private int GetCurrentVolume()
 	    {
 	    	AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);	    
-	    	return audio.getStreamVolume(AudioManager.STREAM_MUSIC);
+	    	return audio.getStreamVolume(AudioManager.STREAM_RING);
 	    }
 	  
 	  }	

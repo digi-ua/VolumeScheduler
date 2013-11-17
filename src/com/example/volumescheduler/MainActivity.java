@@ -7,8 +7,6 @@ import android.app.Activity;
 import android.content.Intent;
 
 public class MainActivity extends Activity {
-
-    final String LOG_TAG = "myLogs";
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
