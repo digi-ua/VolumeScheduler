@@ -1,6 +1,8 @@
 package com.example.volumescheduler;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -43,7 +45,8 @@ public class MainService extends Service {
 	    //long next_time;
 	    Calendar curr_time;
 	    int curr_volume;
-	    DBHelper dbHelper;
+	    
+	    List<TimeTable> ttList = new ArrayList<TimeTable>();
 
 	    public MainRun() {
 	    	curr_time = GetCurrentTime();
@@ -88,36 +91,65 @@ public class MainService extends Service {
 	    }
 	  
 	    private void GetCurrentVolume(Calendar cl)
-	    {	    	
-	    	int min = cl.get(Calendar.MINUTE) + cl.get(Calendar.HOUR_OF_DAY) * 60;
+	    {	
+	    	FillList();
+	    	int minOfDay = cl.get(Calendar.MINUTE) + cl.get(Calendar.HOUR_OF_DAY) * 60;
 	    	int day = cl.get(Calendar.DAY_OF_WEEK) -1;
+	    	int id = -1;
+	    	int min = 1500;
 	    	
+	    	for (final TimeTable tt : ttList) 
+	    	{
+	    		if(tt.day == day)
+	    			if((minOfDay - tt.minOfDay)+((day + 7 - tt.day)%7)*1440 < min)
+	    			{
+	    				min = minOfDay - tt.minOfDay;
+	    				id = tt.id;
+	    			}
+	            
+	    	}
 	    	
 	    }
 
-	    private void GetNearTime()
-	    {
-	    	dbHelper = new DBHelper(MainService.this);
+	    private void FillList()
+	    {	    	
+	    	DBHelper dbHelper = new DBHelper(MainService.this);
 	    	SQLiteDatabase db = dbHelper.getWritableDatabase();	        
 		    Cursor c = db.query("timetable", null, null, null, null, null, null);
 		    if (c.moveToFirst()) {
 		      int idColIndex = c.getColumnIndex("id");
 		      int hourColIndex = c.getColumnIndex("hour");
 		      int minColIndex = c.getColumnIndex("min");
-		      int daysColIndex = c.getColumnIndex("days");
+		      int dayColIndex = c.getColumnIndex("day");
 		      int stateColIndex = c.getColumnIndex("state");
 		      int volumeColIndex = c.getColumnIndex("volume");
 		      do {
-		    	 
-		    	  //add to list
-		    	 // c.getInt(idColIndex)
-
+		    	  TimeTable tt = new TimeTable();
+		    	  tt.id = c.getInt(idColIndex);
+		    	  tt.hour = c.getInt(hourColIndex);
+		    	  tt.min = c.getInt(minColIndex);
+		    	  tt.day = c.getInt(dayColIndex);
+		    	  tt.state = c.getInt(stateColIndex);
+		    	  tt.volume = c.getInt(volumeColIndex);
+		    	  tt.minOfDay = tt.min + tt.hour*60;
+		    	  ttList.add(tt);		    	 
 		      } while (c.moveToNext());
 		    } 
 		    c.close();
 		    dbHelper.close();
 	    }
-	    
-	    
+	    	    
 	  }	
+	  
+	  class TimeTable
+	  {
+		  public int id;
+		  public int hour;
+		  public int min;		  
+		  public int day;
+		  public int state;
+		  public int volume;
+		  public int minOfDay;
+	  }
+	  
 }

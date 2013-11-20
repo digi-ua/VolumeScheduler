@@ -37,29 +37,21 @@ public class MainActivity extends Activity {
     
     public void onClick_read(View v) {    	
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        
 	    Cursor c = db.query("timetable", null, null, null, null, null, null);
-	
-	    // ставим позицию курсора на первую строку выборки
-	    // если в выборке нет строк, вернетс€ false
+
 	    if (c.moveToFirst()) {
-	
-	      // определ€ем номера столбцов по имени в выборке
 	      int idColIndex = c.getColumnIndex("id");
 	      int hourColIndex = c.getColumnIndex("hour");
 	      int minColIndex = c.getColumnIndex("min");
-	      int daysColIndex = c.getColumnIndex("days");
+	      int dayColIndex = c.getColumnIndex("day");
 	      int stateColIndex = c.getColumnIndex("state");
 	      int volumeColIndex = c.getColumnIndex("volume");
 	
-	      do {
-	        // получаем значени€ по номерам столбцов и пишем все в лог
+	      do {	        
 	        Log.d(LOG_TAG,
 	            "ID = " + c.getInt(idColIndex) + 
 	            ", time:  " + c.getInt(hourColIndex) +":"+ c.getInt(minColIndex) + 
-	            ", volume = " + c.getInt(volumeColIndex));
-	        // переход на следующую строку 
-	        // а если следующей нет (текуща€ - последн€€), то false - выходим из цикла
+	            ", volume = " + c.getInt(volumeColIndex));	       
 	      } while (c.moveToNext());
 	    } else
 	      Log.d(LOG_TAG, "0 rows");
@@ -72,8 +64,7 @@ public class MainActivity extends Activity {
         int clearCount = db.delete("timetable", null, null);
         Log.d(LOG_TAG, "deleted rows count = " + clearCount);
         dbHelper.close();
-    }
-    
+    }   
     
     
     public void onClickStart(View v) {
