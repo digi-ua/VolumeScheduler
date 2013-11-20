@@ -19,7 +19,7 @@ class DBHelper extends SQLiteOpenHelper {
           + "id integer primary key autoincrement," 
           + "hour integer,"
           + "min integer,"          
-          + "days text,"				   //0123456 string of days(ex: 015 - sun,mon,tri)
+          + "day integer,"				   //0 - sunday 1 - monday...
           + "state integer,"               //0 - start rule 1 - end rule
           + "volume integer" + ");");
     }

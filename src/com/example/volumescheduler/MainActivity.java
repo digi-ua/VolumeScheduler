@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         cv.put("hour", 16);
         cv.put("min", 34);
-        cv.put("days", "0");
+        cv.put("days", 0);
         cv.put("state", 0);
         cv.put("volume", 1);        
         long rowID = db.insert("timetable", null, cv);
@@ -56,8 +56,8 @@ public class MainActivity extends Activity {
 	        // получаем значени€ по номерам столбцов и пишем все в лог
 	        Log.d(LOG_TAG,
 	            "ID = " + c.getInt(idColIndex) + 
-	            ", time:  " + c.getString(hourColIndex) +":"+ c.getString(minColIndex) + 
-	            ", volume = " + c.getString(volumeColIndex));
+	            ", time:  " + c.getInt(hourColIndex) +":"+ c.getInt(minColIndex) + 
+	            ", volume = " + c.getInt(volumeColIndex));
 	        // переход на следующую строку 
 	        // а если следующей нет (текуща€ - последн€€), то false - выходим из цикла
 	      } while (c.moveToNext());

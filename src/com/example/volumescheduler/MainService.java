@@ -8,12 +8,16 @@ import java.util.concurrent.TimeUnit;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.os.IBinder;
+import android.util.Log;
 
 public class MainService extends Service {
 		  
-	  ExecutorService es;	  
+	  ExecutorService es;	 
+	  final String LOG_TAG = "myLogs";
 	  
 	  public void onCreate() {
 	    super.onCreate();	    
@@ -39,14 +43,12 @@ public class MainService extends Service {
 	    //long next_time;
 	    Calendar curr_time;
 	    int curr_volume;
+	    DBHelper dbHelper;
 
 	    public MainRun() {
-
-	      GetCurrentTime(curr_time);
+	    	curr_time = GetCurrentTime();
 	      //curr_volume = GetCurrentVolume(curr_time);
-	      //якщо існує правило на даний час - взяти опції звуку, в іншому випадку -1
-	      if(curr_volume != -1)
-	    	  SetVolume(curr_volume);
+    	  SetVolume(curr_volume);
 	      //next time = ReadNextTime(curr_time);
 	      //взяти найближчий час(початок нового правила чи кінець поточного)	      
 	    }
@@ -56,32 +58,21 @@ public class MainService extends Service {
 	      try {
 	    	  for(int i = 0;;i++)
 	    	  {
-		    	  GetCurrentTime(curr_time);
+	    		  curr_time = GetCurrentTime();
 		    	  //if(curr_time >= next_time) //якщо настав час зміни правила
 		    	  //{
 		    	  //	curr_volume = GetCurrentVolume(curr_time);
-		    	  //	if(curr_volume != -1)
-			      //		SetVolume(curr_volume);
+		    	  //	SetVolume(curr_volume);
 			      //	next time = ReadNextTime(curr_time);
 		    	  //}	    		  
 		    	  TimeUnit.SECONDS.sleep(20);		    	  
 			  }	      
 	      }catch (InterruptedException e) {e.printStackTrace();}
 	    }
-
 	    
-	    private void GetCurrentTime(Calendar cl)
+	    private Calendar GetCurrentTime()
 	    {
-	    	cl = Calendar.getInstance();
-    	
-	    	//cl.set(2013, 10, 17, 20, 16);  //mounth -= 1; !!
-	    	/*
-	    	cl.set(year, month, day, hourOfDay, minute);
-	    	long millis = cl.getTimeInMillis();
-	    	Calendar cl1 = null;
-	    	cl1.setTimeInMillis(millis);	    	
-	    	int millisecond = cl.get(Calendar.MILLISECOND);
-	    	*/
+	    	return Calendar.getInstance();
 	    }
 	    
 	    private void SetVolume(int volume)
@@ -90,11 +81,43 @@ public class MainService extends Service {
 	    	audio.setStreamVolume(AudioManager.STREAM_RING, volume, 0);
 	    }
 	    
-	    private int GetCurrentVolume()
+	    private int GetVolumeOnDevice()
 	    {
 	    	AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);	    
 	    	return audio.getStreamVolume(AudioManager.STREAM_RING);
 	    }
 	  
+	    private void GetCurrentVolume(Calendar cl)
+	    {	    	
+	    	int min = cl.get(Calendar.MINUTE) + cl.get(Calendar.HOUR_OF_DAY) * 60;
+	    	int day = cl.get(Calendar.DAY_OF_WEEK) -1;
+	    	
+	    	
+	    }
+
+	    private void GetNearTime()
+	    {
+	    	dbHelper = new DBHelper(MainService.this);
+	    	SQLiteDatabase db = dbHelper.getWritableDatabase();	        
+		    Cursor c = db.query("timetable", null, null, null, null, null, null);
+		    if (c.moveToFirst()) {
+		      int idColIndex = c.getColumnIndex("id");
+		      int hourColIndex = c.getColumnIndex("hour");
+		      int minColIndex = c.getColumnIndex("min");
+		      int daysColIndex = c.getColumnIndex("days");
+		      int stateColIndex = c.getColumnIndex("state");
+		      int volumeColIndex = c.getColumnIndex("volume");
+		      do {
+		    	 
+		    	  //add to list
+		    	 // c.getInt(idColIndex)
+
+		      } while (c.moveToNext());
+		    } 
+		    c.close();
+		    dbHelper.close();
+	    }
+	    
+	    
 	  }	
 }
