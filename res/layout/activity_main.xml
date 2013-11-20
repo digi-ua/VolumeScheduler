@@ -43,4 +43,24 @@
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true" />
 
+    <Button
+        android:id="@+id/btn_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="68dp"
+        android:onClick="onClick_add"
+        android:text="btn_add" />
+
+    <Button
+        android:id="@+id/btn_read"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="18dp"
+        android:onClick="onClick_read"
+        android:text="btn_read" />
+
 </RelativeLayout>

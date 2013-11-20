@@ -44,7 +44,7 @@ public class MainService extends Service {
 
 	      GetCurrentTime(curr_time);
 	      //curr_volume = GetCurrentVolume(curr_time);
-	      // якщо існує правило на даний час - взяти опції звуку, в іншому випадку -1
+	      //якщо існує правило на даний час - взяти опції звуку, в іншому випадку -1
 	      if(curr_volume != -1)
 	    	  SetVolume(curr_volume);
 	      //next time = ReadNextTime(curr_time);
