@@ -8,17 +8,20 @@ class DBHelper extends SQLiteOpenHelper {
 
     public DBHelper(Context context) {
       // конструктор суперкласса
-      super(context, "myDB", null, 1);
+      super(context, "volumeDB", null, 1);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
       //Log.d(LOG_TAG, "--- onCreate database ---");
       // создаем таблицу с полями
-      db.execSQL("create table mytable ("
+      db.execSQL("create table timetable ("
           + "id integer primary key autoincrement," 
-          + "name text,"
-          + "email text" + ");");
+          + "hour integer,"
+          + "min integer,"          
+          + "days text,"				   //0123456 string of days(ex: 015 - sun,mon,tri)
+          + "state integer,"               //0 - start rule 1 - end rule
+          + "volume integer" + ");");
     }
 
     @Override

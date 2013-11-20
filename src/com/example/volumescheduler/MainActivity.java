@@ -25,9 +25,12 @@ public class MainActivity extends Activity {
     public void onClick_add(View v) {
     	ContentValues cv = new ContentValues();
         SQLiteDatabase db = dbHelper.getWritableDatabase();
-        cv.put("name", "name1");
-        cv.put("email", "email1");
-        long rowID = db.insert("mytable", null, cv);
+        cv.put("hour", 16);
+        cv.put("min", 34);
+        cv.put("days", "0");
+        cv.put("state", 0);
+        cv.put("volume", 1);        
+        long rowID = db.insert("timetable", null, cv);
         Log.d(LOG_TAG, "row inserted, ID = " + rowID);
         dbHelper.close();
     }
@@ -35,7 +38,7 @@ public class MainActivity extends Activity {
     public void onClick_read(View v) {    	
         SQLiteDatabase db = dbHelper.getWritableDatabase();
         
-	    Cursor c = db.query("mytable", null, null, null, null, null, null);
+	    Cursor c = db.query("timetable", null, null, null, null, null, null);
 	
 	    // ставим позицию курсора на первую строку выборки
 	    // если в выборке нет строк, вернетс€ false
@@ -43,15 +46,18 @@ public class MainActivity extends Activity {
 	
 	      // определ€ем номера столбцов по имени в выборке
 	      int idColIndex = c.getColumnIndex("id");
-	      int nameColIndex = c.getColumnIndex("name");
-	      int emailColIndex = c.getColumnIndex("email");
+	      int hourColIndex = c.getColumnIndex("hour");
+	      int minColIndex = c.getColumnIndex("min");
+	      int daysColIndex = c.getColumnIndex("days");
+	      int stateColIndex = c.getColumnIndex("state");
+	      int volumeColIndex = c.getColumnIndex("volume");
 	
 	      do {
 	        // получаем значени€ по номерам столбцов и пишем все в лог
 	        Log.d(LOG_TAG,
 	            "ID = " + c.getInt(idColIndex) + 
-	            ", name = " + c.getString(nameColIndex) + 
-	            ", email = " + c.getString(emailColIndex));
+	            ", time:  " + c.getString(hourColIndex) +":"+ c.getString(minColIndex) + 
+	            ", volume = " + c.getString(volumeColIndex));
 	        // переход на следующую строку 
 	        // а если следующей нет (текуща€ - последн€€), то false - выходим из цикла
 	      } while (c.moveToNext());
@@ -63,7 +69,7 @@ public class MainActivity extends Activity {
     
     public void cleanDB() {    	
         SQLiteDatabase db = dbHelper.getWritableDatabase();       
-        int clearCount = db.delete("mytable", null, null);
+        int clearCount = db.delete("timetable", null, null);
         Log.d(LOG_TAG, "deleted rows count = " + clearCount);
         dbHelper.close();
     }
