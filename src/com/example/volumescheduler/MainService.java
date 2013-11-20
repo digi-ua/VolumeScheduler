@@ -90,14 +90,13 @@ public class MainService extends Service {
 	    	return audio.getStreamVolume(AudioManager.STREAM_RING);
 	    }
 	  
-	    private void GetCurrentVolume(Calendar cl)
+	    private int GetCurrentVolume(Calendar cl)
 	    {	
 	    	FillList();
 	    	int minOfDay = cl.get(Calendar.MINUTE) + cl.get(Calendar.HOUR_OF_DAY) * 60;
 	    	int day = cl.get(Calendar.DAY_OF_WEEK) -1;
 	    	int id = -1;
-	    	int min = 1500;
-	    	
+	    	int min = 32000;	    	
 	    	for (final TimeTable tt : ttList) 
 	    	{
 	    		if(tt.day == day)
@@ -108,6 +107,7 @@ public class MainService extends Service {
 	    			}
 	            
 	    	}
+	    	return 0;//ttList.
 	    	
 	    }
 
@@ -123,6 +123,7 @@ public class MainService extends Service {
 		      int dayColIndex = c.getColumnIndex("day");
 		      int stateColIndex = c.getColumnIndex("state");
 		      int volumeColIndex = c.getColumnIndex("volume");
+		      int enableColIndex = c.getColumnIndex("enable");
 		      do {
 		    	  TimeTable tt = new TimeTable();
 		    	  tt.id = c.getInt(idColIndex);
@@ -131,6 +132,7 @@ public class MainService extends Service {
 		    	  tt.day = c.getInt(dayColIndex);
 		    	  tt.state = c.getInt(stateColIndex);
 		    	  tt.volume = c.getInt(volumeColIndex);
+		    	  tt.enable = c.getInt(enableColIndex);
 		    	  tt.minOfDay = tt.min + tt.hour*60;
 		    	  ttList.add(tt);		    	 
 		      } while (c.moveToNext());
@@ -149,6 +151,7 @@ public class MainService extends Service {
 		  public int day;
 		  public int state;
 		  public int volume;
+		  public int enable;
 		  public int minOfDay;
 	  }
 	  

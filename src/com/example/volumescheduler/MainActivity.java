@@ -29,7 +29,8 @@ public class MainActivity extends Activity {
         cv.put("min", 34);
         cv.put("days", 0);
         cv.put("state", 0);
-        cv.put("volume", 1);        
+        cv.put("volume", 1);
+        cv.put("enable", 1);
         long rowID = db.insert("timetable", null, cv);
         Log.d(LOG_TAG, "row inserted, ID = " + rowID);
         dbHelper.close();
@@ -46,6 +47,7 @@ public class MainActivity extends Activity {
 	      int dayColIndex = c.getColumnIndex("day");
 	      int stateColIndex = c.getColumnIndex("state");
 	      int volumeColIndex = c.getColumnIndex("volume");
+	      int enableColIndex = c.getColumnIndex("enable");
 	
 	      do {	        
 	        Log.d(LOG_TAG,

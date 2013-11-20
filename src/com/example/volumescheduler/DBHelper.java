@@ -21,7 +21,9 @@ class DBHelper extends SQLiteOpenHelper {
           + "min integer,"          
           + "day integer,"				   //0 - sunday 1 - monday...
           + "state integer,"               //0 - start rule 1 - end rule
-          + "volume integer" + ");");
+          + "volume integer"
+          + "enable integer"+ ");");
+      
     }
 
     @Override
