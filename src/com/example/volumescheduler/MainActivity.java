@@ -21,52 +21,7 @@ public class MainActivity extends Activity {
         
         dbHelper = new DBHelper(this);        
     }
-    
-    public void onClick_add(View v) {
-    	ContentValues cv = new ContentValues();
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-        cv.put("hour", 16);
-        cv.put("min", 34);
-        cv.put("days", 0);
-        cv.put("state", 0);
-        cv.put("volume", 1);
-        cv.put("enable", 1);
-        long rowID = db.insert("timetable", null, cv);
-        Log.d(LOG_TAG, "row inserted, ID = " + rowID);
-        dbHelper.close();
-    }
-    
-    public void onClick_read(View v) {    	
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
-	    Cursor c = db.query("timetable", null, null, null, null, null, null);
-
-	    if (c.moveToFirst()) {
-	      int idColIndex = c.getColumnIndex("id");
-	      int hourColIndex = c.getColumnIndex("hour");
-	      int minColIndex = c.getColumnIndex("min");
-	      int dayColIndex = c.getColumnIndex("day");
-	      int stateColIndex = c.getColumnIndex("state");
-	      int volumeColIndex = c.getColumnIndex("volume");
-	      int enableColIndex = c.getColumnIndex("enable");
-	
-	      do {	        
-	        Log.d(LOG_TAG,
-	            "ID = " + c.getInt(idColIndex) + 
-	            ", time:  " + c.getInt(hourColIndex) +":"+ c.getInt(minColIndex) + 
-	            ", volume = " + c.getInt(volumeColIndex));	       
-	      } while (c.moveToNext());
-	    } else
-	      Log.d(LOG_TAG, "0 rows");
-	    c.close();
-	    dbHelper.close();
-    }
-    
-    public void cleanDB() {    	
-        SQLiteDatabase db = dbHelper.getWritableDatabase();       
-        int clearCount = db.delete("timetable", null, null);
-        Log.d(LOG_TAG, "deleted rows count = " + clearCount);
-        dbHelper.close();
-    }   
+      
     
     
     public void onClickStart(View v) {
