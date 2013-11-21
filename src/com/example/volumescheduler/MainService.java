@@ -101,10 +101,13 @@ public class MainService extends Service {
 	  
 	    private int GetCurrentVolume(Calendar cl) {
 	    	ttList = db.getAll();
+	    	//Скільки хвилин дня пройшло
 	    	int minOfDay = cl.get(Calendar.MINUTE) + cl.get(Calendar.HOUR_OF_DAY) * 60;
-	    	int day = cl.get(Calendar.DAY_OF_WEEK) -1;
-	    	int min = 32000;	
+	    	//день тижня - індексація
+	    	int day = cl.get(Calendar.DAY_OF_WEEK) - 1;
+	    	int min = Integer.MAX_VALUE;	
 	    	TimeTable res = null;
+	    	//шукаю найближчий час в минулому по відношенню до теперішнього часу
 	    	for (final TimeTable tt : ttList) 
 	    	{
 	    		if(tt.day == day) {
