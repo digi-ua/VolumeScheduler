@@ -40,12 +40,12 @@ public class MainService extends Service {
 	  
 	  class MainRun implements Runnable {
 
-	    //long next_time;	
-	    Calendar curr_time;
-	    int curr_rule;
-	    
-	    DBHelper db = null;
-	    List<TimeTable> ttList = null;
+		//long next_time;	
+		Calendar curr_time;
+		int curr_rule;
+		
+		DBHelper db = null;
+		List<TimeTable> ttList = null;
 
 	    public MainRun() {
 	    	db = new DBHelper(MainService.this);
@@ -94,30 +94,27 @@ public class MainService extends Service {
         	}
 	    }
 	    
-	    private int GetVolumeOnDevice()
-	    {
+	    private int GetVolumeOnDevice() {
 	    	AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);	    
 	    	return audio.getStreamVolume(AudioManager.STREAM_RING);
 	    }
 	  
-	    private int GetCurrentVolume(Calendar cl)
-	    {
+	    private int GetCurrentVolume(Calendar cl) {
 	    	ttList = db.getAll();
 	    	int minOfDay = cl.get(Calendar.MINUTE) + cl.get(Calendar.HOUR_OF_DAY) * 60;
 	    	int day = cl.get(Calendar.DAY_OF_WEEK) -1;
-	    	int id = -1;
-	    	int min = 32000;	    	
+	    	int min = 32000;	
+	    	TimeTable res = null;
 	    	for (final TimeTable tt : ttList) 
 	    	{
-	    		if(tt.day == day)
-	    			if((minOfDay - tt.getMinOfDay())+((day + 7 - tt.day)%7)*1440 < min)
-	    			{
+	    		if(tt.day == day) {
+	    			if((minOfDay - tt.getMinOfDay())+((day + 7 - tt.day)%7)*1440 < min) {
 	    				min = minOfDay - tt.getMinOfDay();
-	    				id = tt.id;
-	    			}
-	            
-	    	}
-	    	return ttList.;//ttList.	    	
+	    				res = tt;
+	    			}	        
+	    		}
+	    	}	    	
+	    	return ttList.indexOf(res);	    	
 	    }    
-	  }
+	    }
 }
