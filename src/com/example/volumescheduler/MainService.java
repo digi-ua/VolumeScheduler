@@ -1,6 +1,5 @@
 package com.example.volumescheduler;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -10,11 +9,8 @@ import java.util.concurrent.TimeUnit;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.media.AudioManager;
 import android.os.IBinder;
-import android.util.Log;
 
 public class MainService extends Service {
 	  ExecutorService es;
@@ -67,10 +63,13 @@ public class MainService extends Service {
 		    	  //	curr_volume = GetCurrentVolume(curr_time);
 		    	  //	SetVolume(curr_volume);
 			      //	next time = ReadNextTime(curr_time);
-		    	  //}	    		  
+		    	  //}
 		    	  TimeUnit.SECONDS.sleep(20);	    	  
 			  }
-	      }catch (InterruptedException e) {e.printStackTrace();}
+	      }
+	      catch (InterruptedException e) {
+	    	  e.printStackTrace();
+	      }
 	    }
 	    
 	    private Calendar GetCurrentTime()
@@ -94,27 +93,27 @@ public class MainService extends Service {
         	}
 	    }
 	    
-	    private int GetVolumeOnDevice() {
-	    	AudioManager audio = (AudioManager) getSystemService(Context.AUDIO_SERVICE);	    
-	    	return audio.getStreamVolume(AudioManager.STREAM_RING);
+	    private int GetRingerMode() {
+	    	AudioManager aManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);	    
+	    	return aManager.getRingerMode();
 	    }
 	  
-	    private int GetCurrentVolume(Calendar cl) {
+	    private int GetFirstRule(Calendar cl) {
 	    	ttList = db.getAll();
 	    	int minOfDay = cl.get(Calendar.MINUTE) + cl.get(Calendar.HOUR_OF_DAY) * 60;
-	    	int day = cl.get(Calendar.DAY_OF_WEEK) -1;
-	    	int min = 32000;	
+	    	int day = cl.get(Calendar.DAY_OF_WEEK) - 1;
+	    	int min = Integer.MAX_VALUE;
 	    	TimeTable res = null;
-	    	for (final TimeTable tt : ttList) 
+	    	for (final TimeTable tt : ttList)
 	    	{
 	    		if(tt.day == day) {
 	    			if((minOfDay - tt.getMinOfDay())+((day + 7 - tt.day)%7)*1440 < min) {
 	    				min = minOfDay - tt.getMinOfDay();
 	    				res = tt;
-	    			}	        
+	    			}
 	    		}
-	    	}	    	
-	    	return ttList.indexOf(res);	    	
+	    	}
+	    	return ttList.indexOf(res);
 	    }    
-	    }
+	 }
 }
