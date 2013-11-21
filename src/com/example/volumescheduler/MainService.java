@@ -45,6 +45,7 @@ public class MainService extends Service {
 
 	    public MainRun() {
 	    	db = new DBHelper(MainService.this);
+	    	ttList = db.getAll();
 	    	curr_time = GetCurrentTime();
 	    	
 	      //curr_volume = GetCurrentVolume(curr_time);
@@ -98,8 +99,7 @@ public class MainService extends Service {
 	    	return aManager.getRingerMode();
 	    }
 	  
-	    private int GetFirstRule(Calendar cl) {
-	    	ttList = db.getAll();
+	    private int GetCurrentMode(Calendar cl) {
 	    	int minOfDay = cl.get(Calendar.MINUTE) + cl.get(Calendar.HOUR_OF_DAY) * 60;
 	    	int day = cl.get(Calendar.DAY_OF_WEEK) - 1;
 	    	int min = Integer.MAX_VALUE;
@@ -113,7 +113,11 @@ public class MainService extends Service {
 	    			}
 	    		}
 	    	}
-	    	return ttList.indexOf(res);
+	    	if(res.state == 0) {
+	    		return res.rule;
+	    	} else {
+	    		return -1;
+	    	}
 	    }    
 	 }
 }
