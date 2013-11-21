@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.IBinder;
+import android.text.format.Time;
 
 public class MainService extends Service {
 	  ExecutorService es;
@@ -36,8 +37,8 @@ public class MainService extends Service {
 	  
 	  class MainRun implements Runnable {
 
-		Calendar next_time;	
-		Calendar curr_time;
+		Time next_time;	
+		Time curr_time;
 		int curr_rule;
 		
 		DBHelper db = null;
@@ -49,8 +50,7 @@ public class MainService extends Service {
 	    	curr_time = GetCurrentTime();	    	
 	    	curr_rule = GetCurrentMode(curr_time);	    	
 	    	SetRule(curr_rule);
-	    	next_time = GetNextTime(curr_time);
-	    	//взяти найближчий час(початок нового правила чи кінець поточного)	      
+	    	next_time = GetNextTime(curr_time);     
 	    }
 	    
 	    public void run() {
@@ -58,12 +58,13 @@ public class MainService extends Service {
 	    	  while (true)
 	    	  {
 	    		  curr_time = GetCurrentTime();
-		    	  //if(curr_time >= next_time) //якщо настав час зміни правила
-		    	  //{
-		    	  //	curr_volume = GetCurrentVolume(curr_time);
-		    	  //	SetVolume(curr_volume);
-			      //	next time = ReadNextTime(curr_time);
-		    	  //}
+	    		  int sub = Time.compare(curr_time, next_time);
+		    	  if(sub > 0)
+		    	  {
+		    		  curr_rule = GetCurrentMode(curr_time);
+		    		  SetRule(curr_rule);
+		    		  next_time = GetNextTime(curr_time);
+		    	  }
 		    	  TimeUnit.SECONDS.sleep(20);	    	  
 			  }
 	      }
@@ -72,9 +73,14 @@ public class MainService extends Service {
 	      }
 	    }
 	    
-	    private Calendar GetCurrentTime()
+	    private Time GetCurrentTime()
 	    {
-	    	return Calendar.getInstance();
+	    	Calendar cl = Calendar.getInstance();
+	    	Time t = new Time();
+	    	t.hour = cl.get(Calendar.HOUR_OF_DAY);
+	    	t.minute = cl.get(Calendar.MINUTE);
+	    	t.weekDay = cl.get(Calendar.DAY_OF_WEEK - 1);	    	
+	    	return t;	    	
 	    }
 	    
 	    private void SetRule(int rule)
@@ -98,9 +104,9 @@ public class MainService extends Service {
 	    	return aManager.getRingerMode();
 	    }
 	  
-	    private int GetCurrentMode(Calendar cl) {
-	    	int minOfDay = cl.get(Calendar.MINUTE) + cl.get(Calendar.HOUR_OF_DAY) * 60;
-	    	int day = cl.get(Calendar.DAY_OF_WEEK) - 1;
+	    private int GetCurrentMode(Time t) {
+	    	int minOfDay = t.minute + t.hour * 60;
+	    	int day = t.weekDay;
 	    	int min = Integer.MAX_VALUE;
 	    	TimeTable res = null;
 	    	for (final TimeTable tt : ttList)
@@ -119,9 +125,9 @@ public class MainService extends Service {
 	    	}
 	    } 
 	    
-	    private Calendar GetNextTime(Calendar cl) {
-	    	int minOfDay = cl.get(Calendar.MINUTE) + cl.get(Calendar.HOUR_OF_DAY) * 60;
-	    	int day = cl.get(Calendar.DAY_OF_WEEK) - 1;
+	    private Time GetNextTime(Time t) {
+	    	int minOfDay = t.minute + t.hour * 60;
+	    	int day = t.weekDay;
 	    	int min = Integer.MAX_VALUE;
 	    	TimeTable res = null;
 	    	for (final TimeTable tt : ttList)
@@ -132,17 +138,12 @@ public class MainService extends Service {
 	    				res = tt;
 	    			}
 	    		}	    		
-	    	}
-	    	Calendar clNext;
-	    	
-	    	res.day;
-	    	res.hour;
-	    	res.min;
-	    		    	
-	    	clNext.set
-	    	
-	    	
-
+	    	}	    
+	    	//Time t1;
+	    	t.weekDay = res.day;
+	    	t.hour = res.hour;
+	    	t.minute = res.min;
+	    	return t;
 	    }
 	    
 	    
