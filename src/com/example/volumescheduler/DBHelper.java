@@ -22,7 +22,7 @@ class DBHelper extends SQLiteOpenHelper {
 	private SQLiteDatabase db;
 	
     public DBHelper(Context context) {
-      super(context, "volumeDB", null, 1);
+      super(context, "volumeDB", null, 3);
       db = getWritableDatabase();
     }
 
@@ -43,7 +43,7 @@ class DBHelper extends SQLiteOpenHelper {
     	
     }
     
-    private long Insert(TimeTable tt) {
+    private long Insert(TimeTable tt) {    	   	
     	ContentValues cv = new ContentValues();
         cv.put(T_HOUR, tt.hour);
         cv.put(T_MIN, tt.min);

@@ -26,6 +26,15 @@
             android:onClick="onClick"
             android:background="@null"
             android:src="@drawable/add" />
+
+        <Button
+            android:id="@+id/button1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:onClick="onClickStart"
+            android:text="Button" />
  
     </RelativeLayout>
  

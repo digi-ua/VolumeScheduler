@@ -145,8 +145,7 @@ public class MainService extends Service {
                                             res = tt;
                                     }
                             }                            
-                    }            
-                    //Time t1;
+                    }
                     t.weekDay = res.day;
                     t.hour = res.hour;
                     t.minute = res.min;
