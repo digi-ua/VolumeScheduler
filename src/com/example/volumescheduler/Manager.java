@@ -9,7 +9,7 @@ import android.text.format.Time;
 public class Manager {
 	
 	//DBHelper db = new DBHelper(Manager.this);
-	DBHelper dbHelper = new DBHelper();
+	/*DBHelper dbHelper = new DBHelper();
 	TimeTable tt = new TimeTable();
 	List<TimeTable> ttList = dbHelper.getAll();
 	int[] timeArray = new int[ttList.size()];
@@ -22,5 +22,5 @@ public class Manager {
 			time.set(0, timeTable.min, timeTable.hour, 0, 0, 0);
 			timeArray[i] = time - t;
 		}
-	}
+	}*/
 }

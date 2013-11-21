@@ -12,9 +12,11 @@ import android.content.Intent;
 import android.media.AudioManager;
 import android.os.IBinder;
 import android.text.format.Time;
+import android.util.Log;
 
 public class MainService extends Service {
           ExecutorService es;
+          final String LOG_TAG = "myLogs";
           
           public void onCreate() {
             super.onCreate();            
@@ -28,7 +30,9 @@ public class MainService extends Service {
           public int onStartCommand(Intent intent, int flags, int startId) {
             MainRun mr = new MainRun();
             es.execute(mr);
+            Log.d(LOG_TAG, "MainService onStart");
             return super.onStartCommand(intent, flags, startId);
+            
           }
 
           public IBinder onBind(Intent arg0) {
@@ -47,10 +51,12 @@ public class MainService extends Service {
             public MainRun() {
                     db = new DBHelper(MainService.this);
                     ttList = db.getAll();
-                    curr_time = GetCurrentTime();                    
-                    curr_rule = GetCurrentMode(curr_time);                    
+                    curr_time = GetCurrentTime();           
+                    Log.d(LOG_TAG, "MainService 3");
+                    curr_rule = GetCurrentMode(curr_time);
                     SetRule(curr_rule);
-                    next_time = GetNextTime(curr_time);     
+                    next_time = GetNextTime(curr_time);  
+                    Log.d(LOG_TAG, "MainService 6");
             }
             
             public void run() {
@@ -111,12 +117,12 @@ public class MainService extends Service {
                     TimeTable res = null;
                     for (final TimeTable tt : ttList)
                     {                            
-                                    if(tt.day == day) {
-                                            if((minOfDay - tt.getMinOfDay())+((day + 7 - tt.day)%7)*1440 < min) {
-                                                    min = minOfDay - tt.getMinOfDay();
-                                                    res = tt;
-                                            }
-                                    }                            
+                        if(tt.day == day) {
+                                if((minOfDay - tt.getMinOfDay())+((day + 7 - tt.day)%7)*1440 < min) {
+                                        min = minOfDay - tt.getMinOfDay();
+                                        res = tt;
+                                }
+                        }                            
                     }
                     if(res.state == 0) {
                             return res.rule;
@@ -130,6 +136,7 @@ public class MainService extends Service {
                     int day = t.weekDay;
                     int min = Integer.MAX_VALUE;
                     TimeTable res = null;
+                    
                     for (final TimeTable tt : ttList)
                     {                            
                             if(tt.day == day) {
