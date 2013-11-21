@@ -16,11 +16,11 @@ public class Manager {
 	int i = 0;
 	Time time = new Time();
 	public void Varfication(Time t)
+	{
+		for(TimeTable timeTable : ttList)
 		{
-			for(TimeTable timeTable : ttList)
-			{
-				time.set(0, timeTable.min, timeTable.hour, 0, 0, 0);
-				timeArray[i] = time - t;
-			}
+			time.set(0, timeTable.min, timeTable.hour, 0, 0, 0);
+			timeArray[i] = time - t;
 		}
+	}
 }
