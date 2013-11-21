@@ -36,7 +36,7 @@ public class MainService extends Service {
 	  
 	  class MainRun implements Runnable {
 
-		//long next_time;	
+		Calendar next_time;	
 		Calendar curr_time;
 		int curr_rule;
 		
@@ -46,12 +46,11 @@ public class MainService extends Service {
 	    public MainRun() {
 	    	db = new DBHelper(MainService.this);
 	    	ttList = db.getAll();
-	    	curr_time = GetCurrentTime();
-	    	
-	      //curr_volume = GetCurrentVolume(curr_time);
-    	  SetRule(curr_rule);
-	      //next time = ReadNextTime(curr_time);
-	      //взяти найближчий час(початок нового правила чи кінець поточного)	      
+	    	curr_time = GetCurrentTime();	    	
+	    	curr_rule = GetCurrentMode(curr_time);	    	
+	    	SetRule(curr_rule);
+	    	next_time = GetNextTime(curr_time);
+	    	//взяти найближчий час(початок нового правила чи кінець поточного)	      
 	    }
 	    
 	    public void run() {
@@ -105,19 +104,49 @@ public class MainService extends Service {
 	    	int min = Integer.MAX_VALUE;
 	    	TimeTable res = null;
 	    	for (final TimeTable tt : ttList)
-	    	{
-	    		if(tt.day == day) {
-	    			if((minOfDay - tt.getMinOfDay())+((day + 7 - tt.day)%7)*1440 < min) {
-	    				min = minOfDay - tt.getMinOfDay();
-	    				res = tt;
-	    			}
-	    		}
+	    	{	    		
+		    		if(tt.day == day) {
+		    			if((minOfDay - tt.getMinOfDay())+((day + 7 - tt.day)%7)*1440 < min) {
+		    				min = minOfDay - tt.getMinOfDay();
+		    				res = tt;
+		    			}
+		    		}	    		
 	    	}
 	    	if(res.state == 0) {
 	    		return res.rule;
 	    	} else {
 	    		return -1;
 	    	}
-	    }    
+	    } 
+	    
+	    private Calendar GetNextTime(Calendar cl) {
+	    	int minOfDay = cl.get(Calendar.MINUTE) + cl.get(Calendar.HOUR_OF_DAY) * 60;
+	    	int day = cl.get(Calendar.DAY_OF_WEEK) - 1;
+	    	int min = Integer.MAX_VALUE;
+	    	TimeTable res = null;
+	    	for (final TimeTable tt : ttList)
+	    	{	    		
+	    		if(tt.day == day) {
+	    			if((tt.getMinOfDay() - minOfDay)+((tt.day + 7 - day)%7)*1440 < min) {
+	    				min = tt.getMinOfDay() - minOfDay;
+	    				res = tt;
+	    			}
+	    		}	    		
+	    	}
+	    	Calendar clNext;
+	    	
+	    	res.day;
+	    	res.hour;
+	    	res.min;
+	    		    	
+	    	clNext.set
+	    	
+	    	
+
+	    }
+	    
+	    
+	    
+	    
 	 }
 }
