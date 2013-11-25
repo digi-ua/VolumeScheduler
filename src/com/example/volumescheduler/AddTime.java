@@ -55,6 +55,12 @@ public class AddTime extends DialogFragment { // implements OnClickListener {
 
 		timeS = (TimePicker) dialog.findViewById(R.id.timePickerS);
 		timeE = (TimePicker) dialog.findViewById(R.id.timePickerE);
+		
+		S_HOUR = timeS.getCurrentHour();
+		S_MIN = timeS.getCurrentMinute();
+		
+		E_HOUR = timeE.getCurrentHour();
+		E_MIN = timeE.getCurrentMinute();
 
 		timeS.setOnTimeChangedListener(new OnTimeChangedListener() {
 
