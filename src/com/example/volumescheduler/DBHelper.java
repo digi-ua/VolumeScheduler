@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +23,7 @@ class DBHelper extends SQLiteOpenHelper {
 	private SQLiteDatabase db;
 	
     public DBHelper(Context context) {
-      super(context, "volumeDB", null, 3);
+      super(context, "volumeDB.db", null, 3);
       db = getWritableDatabase();
     }
 
@@ -31,7 +32,7 @@ class DBHelper extends SQLiteOpenHelper {
       db.execSQL("create table " + T_NAME + "("
           + T_ID + " integer primary key autoincrement," 
           + T_HOUR + " integer,"
-          + T_MIN + " integer,"          
+          + T_MIN + " integer"          
           + T_DAY + " integer,"				   //0 - sunday 6 - saturday
           + T_STATE + " integer,"              //0 - start rule id - end rule
           + T_RULE + " integer"
@@ -58,12 +59,12 @@ class DBHelper extends SQLiteOpenHelper {
     
     private long Update(TimeTable tt) {
     	ContentValues cv = new ContentValues();
-        cv.put("hour", tt.hour);
-        cv.put("min", tt.min);
-        cv.put("day", tt.day);
-        cv.put("state", tt.state);
-        cv.put("rule", tt.rule);
-        cv.put("enable", tt.enable);
+        cv.put(T_HOUR, tt.hour);
+        cv.put(T_MIN, tt.min);
+        cv.put(T_DAY, tt.day);
+        cv.put(T_STATE, tt.state);
+        cv.put(T_RULE, tt.rule);
+        cv.put(T_ENABLE, tt.enable);
         db.update(T_NAME, cv, T_ID + "=" + tt.id, null);
         close();
         return tt.id;
