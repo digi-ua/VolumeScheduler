@@ -33,14 +33,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="TextView" />
+                android:text="Time" />
 
             <Button
                 android:id="@+id/btn_addDays"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="AddDays" />
+                android:text="AddDays"
+                android:onClick="onClick" />
+
+            <TextView
+                android:id="@+id/tbx_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Days" />
 
             <ToggleButton
                 android:id="@+id/tgl_vibrate"
@@ -54,7 +62,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="TextView" />
+                android:text="Vibrate" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
