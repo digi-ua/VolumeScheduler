@@ -1,6 +1,7 @@
 package com.example.volumescheduler;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -27,6 +28,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        onDebilClick();
         
         //list  = (ListView) findViewById(R.id.list_view);
         btn_add = (ImageButton) findViewById(R.id.btn_add);
@@ -66,8 +68,8 @@ public class MainActivity extends Activity {
     
     
     
-    /*
-    public void onClickStart(View v) {
+    
+    public void onDebilClick() {
     	TimeTable tt = new TimeTable();
     	tt.id=0;
     	tt.hour=1;
@@ -81,19 +83,13 @@ public class MainActivity extends Activity {
     	
     	Log.d(LOG_TAG, "DB init");
     	
-    	db.Save(tt); 
+    	db.Save(tt);
     	
-    	Log.d(LOG_TAG, "DB save");
-    	
-    	db.Save(tt); 
-    	
-    	Log.d(LOG_TAG, "DB compl");
-    	
-    	startService(new Intent(this, MainService.class));      
+    	//startService(new Intent(this, MainService.class));      
     }
     
     public void onClickStop(View v) {
     	stopService(new Intent(this, MainService.class));
     }
-	*/
+	
 }
