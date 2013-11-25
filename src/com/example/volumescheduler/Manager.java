@@ -1,26 +1,42 @@
 package com.example.volumescheduler;
 
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
-import android.text.format.Time;
+
 
 public class Manager {
-	
-	//DBHelper db = new DBHelper(Manager.this);
-	/*DBHelper dbHelper = new DBHelper();
-	TimeTable tt = new TimeTable();
-	List<TimeTable> ttList = dbHelper.getAll();
-	int[] timeArray = new int[ttList.size()];
-	int i = 0;
-	Time time = new Time();
-	public void Varfication(Time t)
+	/*в статус≥ початку записане ≥д статусу к≥нц€б в статус≥ к≥нц€ записаний нуль*/
+	private boolean CreateUpdateNewRule(TimeTable[] ttObjects)
 	{
-		for(TimeTable timeTable : ttList)
-		{
-			time.set(0, timeTable.min, timeTable.hour, 0, 0, 0);
-			timeArray[i] = time - t;
+		DBHelper dBHelper = new DBHelper();
+		List<TimeTable> ttList = dBHelper.getAll();
+		try {
+			int j = 0;
+				int tmp = ttObjects[j].state;
+				if(tmp != 0)
+				{
+					
+					for (int i = 0; i < ttObjects.length; i++) {
+						
+					}
+				}
+			for (int i = 0; i < ttObjects.length; i++) {
+				dbHelper.Save(ttObjects[i]);
+			}
+			
+		} catch (Exception e) {
+			return false;
 		}
-	}*/
+		return true;
+	}
+	private boolean DeleteRule(TimeTable[] ttObjects)
+	{
+		try {
+			for (int i = 0; i < ttObjects.length; i++) {
+				dBHelper(ttObjects[i].id);
+			}			
+		} catch (Exception e) {
+			return false;
+		}
+		return true;
+	}
 }
