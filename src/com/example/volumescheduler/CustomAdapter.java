@@ -18,7 +18,7 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 	private Activity activity;
 	private ArrayList data;
 	private static LayoutInflater inflater = null;
-	ListModel tempValues = null;
+	RuleModel tempValues = null;
 	int i = 0;
 
 	/************* CustomAdapter Constructor *****************/
@@ -93,7 +93,7 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 		} else {
 			/***** Get each Model object from Arraylist ********/
 			tempValues = null;
-			tempValues = (ListModel) data.get(position);
+			tempValues = (RuleModel) data.get(position);
 
 			/************ Set Model values in Holder elements ***********/
 			

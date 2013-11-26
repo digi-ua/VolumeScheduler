@@ -9,6 +9,7 @@ import android.R.string;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -18,7 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
-public class AddRule extends Activity implements onSubmitListener, com.example.volumescheduler.AddDays.onSubmitListener {
+public class AddRule extends Activity implements onSubmitListener, AddDays.onSubmitListener {
 	final String LOG_TAG = "myLogs";
 	
 	ToggleButton vibrate;
@@ -32,13 +33,12 @@ public class AddRule extends Activity implements onSubmitListener, com.example.v
 	private int S_MIN;
 	private int E_HOUR;
 	private int E_MIN;
+	private int Vibrate;
+	private String Days = "";
+	
 	private Map<String, Boolean> days_ = new HashMap<String, Boolean>();
 	private boolean[] days = {false, false, false, false, false, false, false};
 	private String[] days_name = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
-
-	private int T_DAY;
-	private int T_RULE;
-	private int T_ENABLE;
 
 	public void onCreate(Bundle savedInstanceState) {
 
@@ -62,7 +62,7 @@ public class AddRule extends Activity implements onSubmitListener, com.example.v
 			@Override
 			public void onCheckedChanged(CompoundButton vibrate,
 					boolean isChecked) {
-				// TODO Auto-generated method stub
+				
 				if (isChecked) {
 					tgl.setText("Checked");
 
@@ -71,20 +71,8 @@ public class AddRule extends Activity implements onSubmitListener, com.example.v
 				}
 			}
 		});
-		/*
-		add_rule.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				dlg = new AddTime();
-				dlg.mListener = AddRule.this;
-				dlg.show(getFragmentManager(), "dlg1");
-			}
-		});
-		*/
 	}
 
-	
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.btn_addTime:
@@ -96,6 +84,33 @@ public class AddRule extends Activity implements onSubmitListener, com.example.v
 			AddDays add_days_dlg = new AddDays();
 			add_days_dlg.mListener = AddRule.this;
 			add_days_dlg.show(getFragmentManager(), "add_days_dlg");
+			break;
+		case R.id.btnYes:
+			Intent intent = new Intent(this, MainActivity.class);
+			
+			/******************
+			  
+			 Тут будемо викликати перевірку на накладання правил і якщо усе ГУД,
+			 то створюємо правило. Його в БД, сюда АЙДІШКУ нову і СТАН
+			 
+			 Далі виводимо його в лістВЮ
+			  
+			 ******************/
+			int id = 0;
+			int active = 1;
+			intent.putExtra("ID", id);
+            intent.putExtra("S_HOUR", S_HOUR);
+            intent.putExtra("S_MIN", S_MIN);
+            intent.putExtra("E_HOUR", E_HOUR);
+            intent.putExtra("E_MIN", E_MIN);
+            intent.putExtra("Vibrate", Vibrate);
+            intent.putExtra("Active", active);
+            intent.putExtra("Days", Days);
+ 
+            // показываем новое Activity
+            startActivity(intent);
+            break;
+
 		default:
 			break;
 		}
@@ -119,13 +134,13 @@ public class AddRule extends Activity implements onSubmitListener, com.example.v
 		{
 			days_.put(days_name[i], days[i]);
 		}
-		String str = "";
+		Days = "";
 		for (int i = 0; i < days_.size(); i ++)
 		{
 			if(days_.get(days_name[i]))
-				str += days_name[i] + " ";
+				Days += days_name[i] + " ";
 		}
-		tbx_days.setText(str);
+		tbx_days.setText(Days);
 	}
 
 }

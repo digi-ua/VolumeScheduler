@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 	ListView list;
 	CustomAdapter adapter;
 	public MainActivity mainActivity = null;
-	public ArrayList<ListModel> CustomListViewValuesArr = new ArrayList<ListModel>();
+	public ArrayList<RuleModel> CustomListViewValuesArr = new ArrayList<RuleModel>();
 	private ImageButton btn_add;
 	private TextView emptyView;
 	private String[] s_time = { "17:10", "18:20" };
@@ -39,7 +39,7 @@ public class MainActivity extends Activity {
 
 		mainActivity = this;
 
-		//onDebilClick();
+		// onDebilClick();
 
 		/******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
 		setListData();
@@ -53,36 +53,67 @@ public class MainActivity extends Activity {
 		list.setAdapter(adapter);
 
 	}
+	
+	public void FromDBtoList()
+	{
+		//Тут заповняєм лістВЮ при запуску . Через метод з манаджера.
+		/******
+		  
+		 List<RuleModel> rules = Manager.getRuleList();
+		 
+		 for(int i = 0; i < list.lenght; i ++)
+		 {
+		 	CustomListViewValuesArr.add(rules[i]);
+		 }
+		  
+		 
+		 ******/
+	}
+	
+	
+	///мабуть не треба цього методу
+	public void getIntents() {
+		
+		final RuleModel rule = new RuleModel();
+		
+		rule.setID(getIntent().getIntExtra("ID", 0));
+		rule.setStartTime(getIntent().getIntExtra("S_HOUR", 0), getIntent().getIntExtra("S_MIN", 0));
+		rule.setEndTime(getIntent().getIntExtra("E_HOUR", 0), getIntent().getIntExtra("E_MIN", 0));
+		rule.setDays(getIntent().getStringExtra("Days"));
+		rule.setVibrate(getIntent().getIntExtra("Vibrate", 0));
+		rule.setActive(getIntent().getIntExtra("Active", 0));
+
+	}
 
 	/****** Function to set data in ArrayList *************/
 	public void setListData() {
 
 		for (int i = 0; i < 3; i++) {
 
-			final ListModel rules = new ListModel();
+			final RuleModel rule = new RuleModel();
 
 			/******* Firstly take data in model object ******/
-			rules.setStartTime(i, i + 28);
-			rules.setEndTime(i + 1, i + 41);
-			rules.setDays(rule_days[i]);
+			rule.setStartTime(i, i + 28);
+			rule.setEndTime(i + 1, i + 41);
+			rule.setDays(rule_days[i]);
 
 			/******** Take Model Object in ArrayList **********/
-			CustomListViewValuesArr.add(rules);
+			CustomListViewValuesArr.add(rule);
 		}
 
 	}
 
 	public void onItemClick(int mPosition) {
-		ListModel tempValues = ( ListModel ) CustomListViewValuesArr.get(mPosition);
-		   
-		 // SHOW ALERT                  
+		RuleModel tempValues = (RuleModel) CustomListViewValuesArr
+				.get(mPosition);
 
-         Toast.makeText(mainActivity,
-                 ""+tempValues.getStartTime()+" min "
-                   +"-"+tempValues.getEndTime()+" min "
-                   +"--Days: "+tempValues.getDays(),
-                 Toast.LENGTH_LONG)
-         .show();
+		// SHOW ALERT
+
+		Toast.makeText(
+				mainActivity,
+				"" + tempValues.getStartTime() + " min " + "-"
+						+ tempValues.getEndTime() + " min " + "--Days: "
+						+ tempValues.getDays(), Toast.LENGTH_LONG).show();
 	}
 
 	public void onClick(View v) {
@@ -99,27 +130,27 @@ public class MainActivity extends Activity {
 
 	}
 
-    public void onDebilClick() {
-    	TimeTable tt = new TimeTable();
-    	tt.id=0;
-    	tt.s_time=100;
-    	tt.e_time=200;		  
-    	tt.days="Sun Mon Tue Wed Thu Fri Sat";
-    	tt.state=2;
-    	tt.rule=1;
-    	tt.activ=1;
-  	  
-    	//DBHelper db = new DBHelper(this);
-    	
-    	Log.d(LOG_TAG, "DB init");
-    	
-    	//db.Save(tt);
-    	
-    	//startService(new Intent(this, MainService.class));      
-    }
-    
-    /*public void onClickStop(View v) {
-    	stopService(new Intent(this, MainService.class));
-    }*/
-	
+	public void onDebilClick() {
+		RuleModel tt = new RuleModel();
+		tt.setID(0);
+		tt.setStartTime(10, 8);
+		tt.setEndTime(11, 43);
+		tt.setDays("Sun Mon Tue Wed Thu Fri Sat");
+		tt.setVibrate(1);
+		tt.setActive(1);
+
+		// DBHelper db = new DBHelper(this);
+
+		Log.d(LOG_TAG, "DB init");
+
+		// db.Save(tt);
+
+		// startService(new Intent(this, MainService.class));
+	}
+
+	/*
+	 * public void onClickStop(View v) { stopService(new Intent(this,
+	 * MainService.class)); }
+	 */
+
 }
