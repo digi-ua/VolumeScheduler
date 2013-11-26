@@ -99,7 +99,7 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 			
 			holder.tbx_rule_start_time.setText( tempValues.getStartTimeString() );
 			holder.tbx_rule_end_time.setText( tempValues.getEndTimeString() );
-			holder.tbx_rule_days.setText(tempValues.getDays());
+			holder.tbx_rule_days.setText(tempValues.Days);
 
 			/******** Set Item Click Listner for LayoutInflater for each row *******/
 

@@ -7,6 +7,11 @@
     <string name="start">Start service</string>
     <string name="stop">Stop service</string>
     
+    <string name="btn_time_add">Add Time</string>
+    <string name="btn_time_edit">Edit Time</string>
+    <string name="btn_days_add">Add Days</string>
+    <string name="btn_days_edit">Edit Days</string>
+    
     <string name="add_title">Add Rule</string>
     
     <string name="dialog_1">Dialog 1</string>

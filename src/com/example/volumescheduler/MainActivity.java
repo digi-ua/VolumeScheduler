@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -17,7 +18,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity  {
 
 	// DBHelper dbHelper;
 	final String LOG_TAG = "myLogs";
@@ -76,12 +77,12 @@ public class MainActivity extends Activity {
 		
 		final RuleModel rule = new RuleModel();
 		
-		rule.setID(getIntent().getIntExtra("ID", 0));
+		rule.ID = getIntent().getIntExtra("ID", 0);
 		rule.setStartTime(getIntent().getIntExtra("S_HOUR", 0), getIntent().getIntExtra("S_MIN", 0));
 		rule.setEndTime(getIntent().getIntExtra("E_HOUR", 0), getIntent().getIntExtra("E_MIN", 0));
-		rule.setDays(getIntent().getStringExtra("Days"));
-		rule.setVibrate(getIntent().getIntExtra("Vibrate", 0));
-		rule.setActive(getIntent().getIntExtra("Active", 0));
+		rule.Days = getIntent().getStringExtra("Days");
+		rule.Vibrate = getIntent().getIntExtra("Vibrate", 0);
+		rule.Active = getIntent().getIntExtra("Active", 0);
 
 	}
 
@@ -95,7 +96,7 @@ public class MainActivity extends Activity {
 			/******* Firstly take data in model object ******/
 			rule.setStartTime(i, i + 28);
 			rule.setEndTime(i + 1, i + 41);
-			rule.setDays(rule_days[i]);
+			rule.Days = rule_days[i];
 
 			/******** Take Model Object in ArrayList **********/
 			CustomListViewValuesArr.add(rule);
@@ -108,12 +109,22 @@ public class MainActivity extends Activity {
 				.get(mPosition);
 
 		// SHOW ALERT
-
+		/*
 		Toast.makeText(
 				mainActivity,
-				"" + tempValues.getStartTime() + " min " + "-"
-						+ tempValues.getEndTime() + " min " + "--Days: "
-						+ tempValues.getDays(), Toast.LENGTH_LONG).show();
+				"" + tempValues.StartTime + " min " + "-"
+						+ tempValues.EndTime + " min " + "--Days: "
+						+ tempValues.Days, Toast.LENGTH_LONG).show();
+						*/
+		Intent intent = new Intent(this, AddRule.class);
+		intent.putExtra("MODE", 2);
+		intent.putExtra("ID", tempValues.ID);
+        intent.putExtra("S_TIME", tempValues.StartTime);
+        intent.putExtra("E_TIME", tempValues.EndTime);
+        intent.putExtra("Vibrate", tempValues.Vibrate);
+        intent.putExtra("Days", tempValues.Days);
+		startActivity(intent);
+		
 	}
 
 	public void onClick(View v) {
@@ -132,12 +143,12 @@ public class MainActivity extends Activity {
 
 	public void onDebilClick() {
 		RuleModel tt = new RuleModel();
-		tt.setID(0);
-		tt.setStartTime(10, 8);
-		tt.setEndTime(11, 43);
-		tt.setDays("Sun Mon Tue Wed Thu Fri Sat");
-		tt.setVibrate(1);
-		tt.setActive(1);
+		tt.ID = 0;
+		tt.StartTime = 100;
+		tt.EndTime = 200;
+		tt.Days = "Sun Mon Tue Wed Thu Fri Sat";
+		tt.Vibrate = 1;
+		tt.Active = 1;
 
 		// DBHelper db = new DBHelper(this);
 
@@ -147,6 +158,7 @@ public class MainActivity extends Activity {
 
 		// startService(new Intent(this, MainService.class));
 	}
+
 
 	/*
 	 * public void onClickStop(View v) { stopService(new Intent(this,
