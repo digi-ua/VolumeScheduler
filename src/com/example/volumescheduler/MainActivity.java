@@ -99,27 +99,27 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void onDebilClick() {
-		TimeTable tt = new TimeTable();
-		tt.id = 0;
-		tt.hour = 1;
-		tt.min = 8;
-		tt.day = 3;
-		tt.state = 2;
-		tt.rule = 1;
-		tt.enable = 1;
-
-		DBHelper db = new DBHelper(this);
-
-		Log.d(LOG_TAG, "DB init");
-
-		db.Save(tt);
-
-		// startService(new Intent(this, MainService.class));
-	}
-
-	public void onClickStop(View v) {
-		stopService(new Intent(this, MainService.class));
-	}
-
+    public void onDebilClick() {
+    	TimeTable tt = new TimeTable();
+    	tt.id=0;
+    	tt.s_time=100;
+    	tt.e_time=200;		  
+    	tt.days="Sun Mon Tue Wed Thu Fri Sat";
+    	tt.state=2;
+    	tt.rule=1;
+    	tt.activ=1;
+  	  
+    	//DBHelper db = new DBHelper(this);
+    	
+    	Log.d(LOG_TAG, "DB init");
+    	
+    	//db.Save(tt);
+    	
+    	//startService(new Intent(this, MainService.class));      
+    }
+    
+    /*public void onClickStop(View v) {
+    	stopService(new Intent(this, MainService.class));
+    }*/
+	
 }

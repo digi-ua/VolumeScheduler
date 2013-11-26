@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-
+/*
 class DBHelper extends SQLiteOpenHelper {	
 	private final String T_NAME = "timetable";
 	private final String T_ID = "id";
@@ -105,3 +105,4 @@ class DBHelper extends SQLiteOpenHelper {
     
     
   }
+*/
