@@ -39,8 +39,7 @@ public class MainActivity extends Activity  {
 		setContentView(R.layout.activity_main);
 
 		mainActivity = this;
-		onDebilClick();
-		// onDebilClick();
+		onDebilClick();	// test service function
 
 		/******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
 		setListData();
@@ -153,18 +152,14 @@ public class MainActivity extends Activity  {
 		tt.Active = 1;
 
 		DBHelper db = new DBHelper(this);
+		db.Save(tt);		
 
-		Log.d(LOG_TAG, "DB init");
-
-		db.Save(tt);
-
-		// startService(new Intent(this, MainService.class));
+		stopService(new Intent(this, MainService.class));		
+		Log.d(LOG_TAG, "stop service");
+		
+		startService(new Intent(this, MainService.class));
+		
+		
 	}
-
-
-	/*
-	 * public void onClickStop(View v) { stopService(new Intent(this,
-	 * MainService.class)); }
-	 */
 
 }

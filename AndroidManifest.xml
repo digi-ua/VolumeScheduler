@@ -27,7 +27,7 @@
             android:label="@string/add_title" >
         </activity>
 
-        <service android:name="MainService" >
+        <service android:name=".MainService" >
         </service>
     </application>
 

@@ -8,7 +8,6 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.os.IBinder;
@@ -25,15 +24,15 @@ public class MainService extends Service {
           }
           
           public void onDestroy() {
+        	  Log.d(LOG_TAG, "MainService onDestroy");
             super.onDestroy();                        
           }
 
           public int onStartCommand(Intent intent, int flags, int startId) {
-            MainRun mr = new MainRun();
-            es.execute(mr);
-            Log.d(LOG_TAG, "MainService onStart");
-            return super.onStartCommand(intent, flags, startId);
-            
+        	  Log.d(LOG_TAG, "MainService onStart");
+        	  MainRun mr = new MainRun();
+        	  es.execute(mr);
+        	  return super.onStartCommand(intent, flags, startId);            
           }
 
           public IBinder onBind(Intent arg0) {
@@ -51,23 +50,32 @@ public class MainService extends Service {
                 List<RuleModel> ttList = null;
 
             public MainRun() {
-                    db = new DBHelper(MainService.this);
-                    ttList = db.getAll();
-                    curr_time = GetCurrentTime();
                     
-                    currentRuleModel = GetCurrentRule(curr_time);
-                    if(currentRuleModel != null){
-                    	SetRule(currentRuleModel.Rule);
-                    }
-                    
-                    
-                    next_time = GetNextRuleTime(curr_time);
-                    
-                    //Log.d(LOG_TAG, "MainService 6");
             }
             
             public void run() {
               try {
+            	  db = new DBHelper(MainService.this);
+            	  
+            	  Log.d(LOG_TAG, "MainService 1");
+                  
+                  ttList = db.getAll();
+                  curr_time = GetCurrentTime();
+                  
+                  Log.d(LOG_TAG, "MainService 2");
+                  
+                  currentRuleModel = GetCurrentRule(curr_time);
+                                    
+                  Log.d(LOG_TAG, "MainService 3");
+                  
+                  if(currentRuleModel != null){
+                  	SetRule(currentRuleModel.Rule);
+                  }
+                  
+                  next_time = GetNextRuleTime(curr_time);
+                  
+                  Log.d(LOG_TAG, "MainService 4");
+                  
                       while (true)
                       {
                               curr_time = GetCurrentTime();
