@@ -1,34 +1,59 @@
 package com.example.volumescheduler;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Comparator;
 
-
 public class Manager {
 	
-	/*в статус≥ початку записане ≥д статусу к≥нц€, в статус≥ к≥нц€ записаний нуль*/
-	private boolean CreateUpdateNewRule(TimeTable tt)
+	public static boolean ChekedRules(RuleModel ruleModel)
 	{
-		DBHelper dBHelper = new DBHelper(null);
-		List<TimeTable> ttList = dBHelper.getAll();
-		
+		DBHelper dBHelper = new DBHelper(null);	
+		List<RuleModel> ruleList = dBHelper.getAll();
+		List<Integer> newRuleDayList = ruleModel.parseDays();
+		for (RuleModel rm : ruleList) {
+			List<Integer> tmpDayList = rm.parseDays();
+			for (int i = 0; i < 6;) {
+				if(tmpDayList.get(i) == newRuleDayList.get(i))
+				{
+					if((rm.StartTime <= ruleModel.StartTime) && (rm.EndTime > ruleModel.StartTime) && (rm.EndTime < ruleModel.EndTime))
+					{
+						return false;
+					}
+					
+					if((rm.EndTime >= ruleModel.StartTime) && (rm.EndTime > ruleModel.StartTime) && (rm.EndTime < ruleModel.EndTime))
+					{
+						return false;
+					}
+				}
+				else
+					i++;
+			}
+		}
+		return true;
+	}
+	
+	public boolean CreateOrUdateRule(RuleModel ruleModel)
+	{
+		DBHelper dBHelper = new DBHelper(null);		
 		try {
-				dbHelper.Save(tt);	
+				//dbHelper.Save(ruleModel);	
 		} catch (Exception e) {
 			return false;
 		}
 		return true;
 	}
-	private boolean DeleteRule(TimeTable tt)
+	private boolean DeleteRule(RuleModel ruleModel)
 	{
 		try {
-				dBHelper(tt.id);
+				//dBHelper(ruleModel.ID);
 		} catch (Exception e) {
 			return false;
 		}
 		return true;
 	}
 }
+

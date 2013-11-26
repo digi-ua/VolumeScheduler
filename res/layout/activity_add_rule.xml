@@ -44,7 +44,7 @@
                 android:onClick="onClick" />
 
             <TextView
-                android:id="@+id/tbx_days"
+                android:id="@+id/tbx_rule_days"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -83,14 +83,6 @@
                     android:layout_height="wrap_content"
                     android:layout_margin="10dp"
                     android:text="@string/no" >
-                </Button>
-
-                <Button
-                    android:id="@+id/btnMaybe"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="@string/maybe" >
                 </Button>
             </LinearLayout>
         </LinearLayout>
