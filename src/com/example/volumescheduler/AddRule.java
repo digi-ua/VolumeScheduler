@@ -54,7 +54,7 @@ public class AddRule extends Activity implements onSubmitListener, com.example.v
 		time = (TextView) findViewById(R.id.tbx_time);
 		time.setText("Nothing");
 		
-		tbx_days = (TextView) findViewById(R.id.tbx_days);
+		tbx_days = (TextView) findViewById(R.id.tbx_rule_days);
 		tbx_days.setText("Nothing");
 
 		vibrate.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {

@@ -4,7 +4,7 @@ import java.util.Dictionary;
 import java.util.List;
 import java.util.Comparator;
 
-
+/*
 public class Manager {
 	public static Dictionary GetAllTime(TimeTable[] ttObjects)
 	{
@@ -19,8 +19,10 @@ public class Manager {
 		}
 		return null;
 	}
+	*/
 	/*в статус≥ початку записане ≥д статусу к≥нц€б в статус≥ к≥нц€ записаний нуль*/
-	private boolean CreateUpdateNewRule(TimeTable[] ttObjects)
+/*	
+private boolean CreateUpdateNewRule(TimeTable[] ttObjects)
 	{
 		DBHelper dBHelper = new DBHelper();
 		List<TimeTable> ttList = dBHelper.getAll();
@@ -45,3 +47,5 @@ public class Manager {
 		return true;
 	}
 }
+*/
+
