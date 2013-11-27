@@ -56,7 +56,6 @@ class DBHelper extends SQLiteOpenHelper {
         cv.put(T_RUNNING, tt.IsRunning);
         cv.put(T_ACTIVE, tt.Active);
         long rowID = db.insert(T_NAME, null, cv);
-        close();
         return rowID;
     }
     
@@ -70,7 +69,6 @@ class DBHelper extends SQLiteOpenHelper {
         cv.put(T_RUNNING, tt.IsRunning);
         cv.put(T_ACTIVE, tt.Active);
         db.update(T_NAME, cv, T_ID + "=" + tt.ID, null);
-        close();
         return tt.ID;
     }
     
