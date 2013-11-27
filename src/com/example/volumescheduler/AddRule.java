@@ -47,14 +47,14 @@ public class AddRule extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_rule);
 
-		// Intent intent = new Intent(this, MainActivity.class);
+		
 		MODE = getIntent().getIntExtra("MODE", 1);
 
 		btn_addDays = (Button) findViewById(R.id.btn_addDays);
 		btn_addTime = (Button) findViewById(R.id.btn_addTime);
 		add_rule = (Button) findViewById(R.id.btn_add);
 		vibrate = (ToggleButton) findViewById(R.id.tgl_vibrate);
-		tgl = (TextView) findViewById(R.id.tbx_tgl);
+		tgl = (TextView) findViewById(R.id.tbx_vibrate);
 		time = (TextView) findViewById(R.id.tbx_time);
 		tbx_days = (TextView) findViewById(R.id.tbx_rule_days);
 
@@ -95,8 +95,8 @@ public class AddRule extends Activity {
 		case R.id.btn_addDays:
 			showDlgDays();
 			break;
-		case R.id.btnYes:
-			Intent intent = new Intent(this, MainActivity.class);
+		case R.id.btn_submit:
+			Intent intent = new Intent(v.getContext(), MainActivity.class);
 
 			/******************
 			 * Тут будемо викликати перевірку на накладання правил і якщо усе
@@ -119,6 +119,7 @@ public class AddRule extends Activity {
 
 			// показываем новое Activity
 			startActivity(intent);
+			
 			break;
 
 		default:

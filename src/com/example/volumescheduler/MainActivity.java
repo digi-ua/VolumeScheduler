@@ -6,9 +6,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.webkit.WebChromeClient.CustomViewCallback;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageButton;
 import android.widget.Toast;
 //import android.widget.AdapterView.OnItemClickListener;
@@ -18,7 +21,7 @@ import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.Intent;
 
-public class MainActivity extends Activity  {
+public class MainActivity extends Activity {
 
 	// DBHelper dbHelper;
 	final String LOG_TAG = "myLogs";
@@ -39,7 +42,7 @@ public class MainActivity extends Activity  {
 		setContentView(R.layout.activity_main);
 
 		mainActivity = this;
-		onDebilClick();	// test service function
+		//onDebilClick();	// test service function
 
 		/******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
 		setListData();
@@ -102,7 +105,11 @@ public class MainActivity extends Activity  {
 		}
 
 	}
-
+	public void onCheckItem(int mPosition)
+	{
+		Toast.makeText(this, "Item Checked", Toast.LENGTH_SHORT);
+	}
+	
 	public void onItemClick(int mPosition) {
 		RuleModel tempValues = (RuleModel) CustomListViewValuesArr
 				.get(mPosition);

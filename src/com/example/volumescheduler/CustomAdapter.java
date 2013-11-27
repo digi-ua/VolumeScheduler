@@ -10,9 +10,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
 
-public class CustomAdapter extends BaseAdapter implements OnClickListener {
+public class CustomAdapter extends BaseAdapter implements OnClickListener,
+		OnCheckedChangeListener {
 
 	/*********** Declare Used Variables *********/
 	private Activity activity;
@@ -56,7 +60,7 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 		public TextView tbx_rule_start_time;
 		public TextView tbx_rule_end_time;
 		public TextView tbx_rule_days;
-
+		public CheckBox cbx_rule_active;
 	}
 
 	/****** Depends upon data size called for each row , Create each ListView row *****/
@@ -79,6 +83,8 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 					.findViewById(R.id.tbx_time_end);
 			holder.tbx_rule_days = (TextView) vi
 					.findViewById(R.id.tbx_rule_days);
+			holder.cbx_rule_active = (CheckBox) vi
+					.findViewById(R.id.cbx_rule_active);
 
 			/************ Set holder with LayoutInflater ************/
 			vi.setTag(holder);
@@ -96,14 +102,17 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 			tempValues = (RuleModel) data.get(position);
 
 			/************ Set Model values in Holder elements ***********/
-			
-			holder.tbx_rule_start_time.setText( tempValues.getStartTimeString() );
-			holder.tbx_rule_end_time.setText( tempValues.getEndTimeString() );
+
+			holder.tbx_rule_start_time.setText(tempValues.getStartTimeString());
+			holder.tbx_rule_end_time.setText(tempValues.getEndTimeString());
 			holder.tbx_rule_days.setText(tempValues.Days);
+			if (tempValues.Active == 1)
+				holder.cbx_rule_active.setChecked(true);
 
 			/******** Set Item Click Listner for LayoutInflater for each row *******/
 
 			vi.setOnClickListener(new OnItemClickListener(position));
+
 		}
 		return vi;
 	}
@@ -111,6 +120,31 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		Log.v("CustomAdapter", "=====Row button clicked=====");
+	}
+
+	private class setOnCheckedChangeListener implements
+			OnCheckedChangeListener, OnClickListener {
+		private int mPosition;
+
+		public setOnCheckedChangeListener(int position) {
+			mPosition = position;
+		}
+
+		@Override
+		public void onCheckedChanged(CompoundButton btn, boolean checked) {
+			MainActivity sct = (MainActivity) activity;
+
+			sct.onCheckItem(mPosition);
+
+		}
+
+		@Override
+		public void onClick(View arg0) {
+			MainActivity sct = (MainActivity) activity;
+
+			sct.onCheckItem(mPosition);
+		}
+
 	}
 
 	/********* Called when Item click in ListView ************/
@@ -133,5 +167,14 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 
 			sct.onItemClick(mPosition);
 		}
+	}
+
+	@Override
+	public void onCheckedChanged(CompoundButton btn, boolean checked) {
+		MainActivity sct = (MainActivity) activity;
+		int position = 0;
+		if (checked)
+			sct.onCheckItem(position);
+
 	}
 }

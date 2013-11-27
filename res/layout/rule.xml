@@ -41,7 +41,7 @@
             android:textAppearance="?android:attr/textAppearanceSmall" />
 
         <CheckBox
-            android:id="@+id/checkBox1"
+            android:id="@+id/cbx_rule_active"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
        

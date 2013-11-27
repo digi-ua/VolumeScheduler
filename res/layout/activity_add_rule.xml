@@ -8,21 +8,48 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".activity_add_rule" >
 
+    <RelativeLayout
+        android:id="@+id/menu_bar1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="1dp" >
+
+        <ImageButton
+            android:id="@+id/btn_submit"
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_centerVertical="true"
+            android:onClick="onClick"
+            android:src="@drawable/submit_black" />
+
+        <ImageButton
+            android:id="@+id/btn_delete"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="false"
+            android:layout_centerVertical="true"
+            android:onClick="onClick"
+            android:src="@drawable/delete_black" />
+    </RelativeLayout>
+
     <ScrollView
         android:id="@+id/scrollView1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/menu_bar1"
         android:orientation="vertical" >
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:orientation="vertical" >
 
             <Button
                 android:id="@+id/btn_addTime"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="onClick"
@@ -37,11 +64,11 @@
 
             <Button
                 android:id="@+id/btn_addDays"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="AddDays"
-                android:onClick="onClick" />
+                android:onClick="onClick"
+                android:text="AddDays" />
 
             <TextView
                 android:id="@+id/tbx_rule_days"
@@ -50,45 +77,62 @@
                 android:layout_gravity="center"
                 android:text="Days" />
 
-            <ToggleButton
-                android:id="@+id/tgl_vibrate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Vibrate" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" >
 
-            <TextView
-                android:id="@+id/tbx_tgl"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Vibrate" />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentLeft="true"
+                    android:gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:orientation="vertical" >
+
+                    <ToggleButton
+                        android:id="@+id/tgl_voice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vibrate" />
+
+                    <TextView
+                        android:id="@+id/tbx_voice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="VolumeOff" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:gravity="center"
+                    android:layout_marginRight="20dp"
+                    android:orientation="vertical" >
+
+                    <ToggleButton
+                        android:id="@+id/tgl_vibrate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vibrate" />
+
+                    <TextView
+                        android:id="@+id/tbx_vibrate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Vibrate" />
+                </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center" >
 
-                <Button
-                    android:id="@+id/btnYes"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="@string/yes" >
-                </Button>
-
-                <Button
-                    android:id="@+id/btnNo"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="10dp"
-                    android:text="@string/no" >
-                </Button>
             </LinearLayout>
+
         </LinearLayout>
         
     </ScrollView>
-
-    
 
 </RelativeLayout>
