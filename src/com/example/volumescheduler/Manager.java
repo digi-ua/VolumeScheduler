@@ -36,15 +36,36 @@ public class Manager {
 		return true;
 	}
 	
+	public List<RuleModel> GetList()
+	{
+		DBHelper dBHelper = new DBHelper(null);	
+		List<RuleModel> ruleList = dBHelper.getAll();
+		return ruleList;
+	}
+	
 	public boolean CreateOrUdateRule(RuleModel ruleModel)
 	{
-		DBHelper dBHelper = new DBHelper(null);		
+		DBHelper dBHelper = new DBHelper(null);	
+		boolean isCheked = ChekedRules(ruleModel);
+		int ID = ruleModel.ID;
+		List <RuleModel> oldRuleModelList = dBHelper.getAll();
+		if(isCheked)
+		{
+			//DBHelper dBHelper = new DBHelper(null);		
 		try {
+			for (RuleModel rule : oldRuleModelList) {
+				if(rule.ID == ID)
+				{
+					dBHelper.Save(rule);
+				}
+			}		
 				//dbHelper.Save(ruleModel);	
 		} catch (Exception e) {
 			return false;
 		}
 		return true;
+		}
+		return false;		
 	}
 	private boolean DeleteRule(RuleModel ruleModel)
 	{
