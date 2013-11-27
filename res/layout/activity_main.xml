@@ -11,26 +11,21 @@
         <RelativeLayout
             android:id="@+id/menu_bar"
             android:layout_width="fill_parent"
-            android:layout_height="wrap_content" >
-
-            <TextView
-                android:id="@+id/heading_tv"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:text="Rules" />
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin" >
 
             <ImageButton
                 android:id="@+id/btn_add"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:background="@android:drawable/dialog_holo_light_frame"
                 android:onClick="onClick"
-                android:background="@null"
-                
-                android:src="@drawable/add" />
+                android:src="@drawable/add_black" />
+
         </RelativeLayout>
 
         <LinearLayout

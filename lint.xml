@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <issue id="NewApi">
+        <ignore path="res/layout/activity_main.xml" />
         <ignore path="src/com/example/volumescheduler/AddDays.java" />
         <ignore path="src/com/example/volumescheduler/AddFragment.java" />
         <ignore path="src/com/example/volumescheduler/AddRule.java" />
