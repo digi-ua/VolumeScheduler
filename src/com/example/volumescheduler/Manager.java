@@ -36,15 +36,34 @@ public class Manager {
 		return true;
 	}
 	
+	public void AhangeActiveRule(RuleModel ruleModel)
+	{
+		DBHelper dBHelper = new DBHelper(null);	
+		int ID = ruleModel.ID;
+		List <RuleModel> oldRuleModelList = dBHelper.getAll();
+		for (RuleModel rule : oldRuleModelList) {
+			if(rule.ID == ID)
+			{
+				ruleModel.Active += 1;
+				ruleModel.Active /= 2;
+			}
+		}		
+	}
+	
 	public boolean CreateOrUdateRule(RuleModel ruleModel)
 	{
-		DBHelper dBHelper = new DBHelper(null);		
+		boolean isCheked = ChekedRules(ruleModel);
+		if(isCheked)
+		{
+			DBHelper dBHelper = new DBHelper(null);		
 		try {
 				//dbHelper.Save(ruleModel);	
 		} catch (Exception e) {
 			return false;
 		}
 		return true;
+		}
+		return false;		
 	}
 	private boolean DeleteRule(RuleModel ruleModel)
 	{
