@@ -29,7 +29,7 @@ public class MainService extends Service {
           }
 
           public int onStartCommand(Intent intent, int flags, int startId) {
-        	  Log.d(LOG_TAG, "MainService onStart");
+        	  Log.d(LOG_TAG, "MainService 1 - onStart");
         	  MainRun mr = new MainRun();
         	  es.execute(mr);
         	  return super.onStartCommand(intent, flags, startId);            
@@ -49,32 +49,19 @@ public class MainService extends Service {
                 DBHelper db = null;
                 List<RuleModel> ttList = null;
 
-            public MainRun() {
-                    
+            public MainRun() {                    
             }
             
             public void run() {
               try {
-            	  db = new DBHelper(MainService.this);
-            	  
-            	  Log.d(LOG_TAG, "MainService 1");
-                  
+            	  db = new DBHelper(MainService.this);                  
                   ttList = db.getAll();
                   curr_time = GetCurrentTime();
-                  
-                  Log.d(LOG_TAG, "MainService 2");
-                  
                   currentRuleModel = GetCurrentRule(curr_time);
-                                    
-                  Log.d(LOG_TAG, "MainService 3");
-                  
                   if(currentRuleModel != null){
                   	SetRule(currentRuleModel.Rule);
                   }
-                  
                   next_time = GetNextRuleTime(curr_time);
-                  
-                  Log.d(LOG_TAG, "MainService 4");
                   
                       while (true)
                       {
@@ -91,7 +78,7 @@ public class MainService extends Service {
                             	  		next_time = GetNextRuleTime(curr_time);
                             	  	}
                               }
-                              TimeUnit.SECONDS.sleep(30);                      
+                              TimeUnit.SECONDS.sleep(42);                      
                           }
               }
               catch (InterruptedException e) {
@@ -105,7 +92,7 @@ public class MainService extends Service {
                     Time t = new Time();
                     t.hour = cl.get(Calendar.HOUR_OF_DAY);
                     t.minute = cl.get(Calendar.MINUTE);
-                    t.weekDay = cl.get(Calendar.DAY_OF_WEEK - 1);                    
+                    t.weekDay = cl.get(Calendar.DAY_OF_WEEK);                    
                     return t;                    
             }
             
@@ -138,14 +125,20 @@ public class MainService extends Service {
                     int min = Integer.MAX_VALUE;
                     
                     List<Integer> rdays = new ArrayList<Integer>();                    		
-                    RuleModel res = null;
+                    RuleModel res = null;                    
                     
-                    for (final RuleModel tt : ttList){                   	
+                    for (final RuleModel tt : ttList){      
                     	
-                        rdays = tt.parseDays();
-                        int rday = rdays.get(day);
-                    	
-                    	if((tt.Active == 1)&&(rday == 1)){
+                    	rdays = tt.parseDays();                    	
+                    	int rday = -1;
+                    	for(int i = 0; i < rdays.size(); i++){
+                    		if(rdays.get(i) == day){
+                    			rday = day;
+                    			break;                   			
+                    		}
+                    	}                    	                    	
+
+                    	if((tt.Active == 1)&&(rday != -1)){
 	                    	if((minOfDay >= tt.StartTime)&&(minOfDay - tt.StartTime < min)){
 	                    		min = minOfDay - tt.StartTime;
 	                    		res = tt;
@@ -153,11 +146,11 @@ public class MainService extends Service {
                     	}
                     }
                     
-                    if(min == Integer.MAX_VALUE){
+                    if(min > 1500){
                     	if(res.EndTime - minOfDay > 0){
                     		return res;
                     	}
-                    } 
+                    }                    
                     return null;
                     
             } 
@@ -172,25 +165,32 @@ public class MainService extends Service {
                 
                 for (final RuleModel tt : ttList){                   	
                 	
-                    rdays = tt.parseDays();
-                    int rday = rdays.get(day);
+                	rdays = tt.parseDays();                    	
+                	int rday = -1;
+                	for(int i = 0; i < rdays.size(); i++){
+                		if(rdays.get(i) == day){
+                			rday = day;
+                			break;                   			
+                		}
+                	}
                 	
-                	if((tt.Active == 1)&&(rday == 1)){
+                	if((tt.Active == 1)&&(rday != -1)){
                     	if((tt.StartTime >= minOfDay)&&(tt.StartTime - minOfDay < min)){
                     		min = tt.StartTime - minOfDay;
                     		res = tt;
                     	}                    	
                 	}
                 }
-                if(min != Integer.MAX_VALUE){
-                	rdays = res.parseDays();                	
+                if(min != Integer.MAX_VALUE){                	                	
                     t.hour = res.StartTime / 60;
                     t.minute = res.StartTime % 60;
                     return t;
                 }
                 
                 t.weekDay += 8;                
-                t.weekDay = t.weekDay % 7;                
+                t.weekDay = t.weekDay % 7;
+                t.hour = 0;
+                t.minute = 0;
                 return GetNextRuleTime(t);                
             }
             

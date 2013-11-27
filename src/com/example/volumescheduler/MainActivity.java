@@ -152,7 +152,7 @@ public class MainActivity extends Activity  {
 		tt.Active = 1;
 
 		DBHelper db = new DBHelper(this);
-		db.Save(tt);		
+		//db.Save(tt);		
 
 		stopService(new Intent(this, MainService.class));		
 		Log.d(LOG_TAG, "stop service");
