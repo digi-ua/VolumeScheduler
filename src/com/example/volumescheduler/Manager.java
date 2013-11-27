@@ -43,28 +43,23 @@ public class Manager {
 		return ruleList;
 	}
 	
-	public void ChangeActiveRule(RuleModel ruleModel)
-	{
-		DBHelper dBHelper = new DBHelper(null);	
-		int ID = ruleModel.ID;
-		List <RuleModel> oldRuleModelList = dBHelper.getAll();
-		for (RuleModel rule : oldRuleModelList) {
-			if(rule.ID == ID)
-			{
-				ruleModel.Active ^= 1;
-			}
-		}
-		dBHelper.Save(ruleModel);
-	}
-	
 	public boolean CreateOrUdateRule(RuleModel ruleModel)
 	{
 		boolean isCheked = ChekedRules(ruleModel);
+		DBHelper dBHelper = new DBHelper(null);	
+		int ID = ruleModel.ID;
+		List <RuleModel> oldRuleModelList = dBHelper.getAll();
 		if(isCheked)
 		{
 			DBHelper dBHelper = new DBHelper(null);		
 		try {
-				//dbHelper.Save(ruleModel);	
+			for (RuleModel rule : oldRuleModelList) {
+				if(rule.ID == ID)
+				{
+					dBHelper.Save(rule);
+				}
+			}		
+				dbHelper.Save(ruleModel);	
 		} catch (Exception e) {
 			return false;
 		}
