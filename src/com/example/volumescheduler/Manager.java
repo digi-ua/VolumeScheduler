@@ -36,6 +36,13 @@ public class Manager {
 		return true;
 	}
 	
+	public List<RuleModel> GetList(RuleModel ruleModel)
+	{
+		List<RuleModel> ruleList = new ArrayList<RuleModel>();
+		ruleList.add(ruleModel);
+		return ruleList;
+	}
+	
 	public void ChangeActiveRule(RuleModel ruleModel)
 	{
 		DBHelper dBHelper = new DBHelper(null);	
@@ -46,7 +53,8 @@ public class Manager {
 			{
 				ruleModel.Active ^= 1;
 			}
-		}		
+		}
+		dBHelper.Save(ruleModel);
 	}
 	
 	public boolean CreateOrUdateRule(RuleModel ruleModel)
