@@ -5,10 +5,12 @@ import java.util.List;
 
 public class RuleModel {
 	public int ID;
-	public int StartTime = 0;
-	public int EndTime = 0;
-	public int Vibrate = 0;
-	public String Days = "";
+	public int StartTime;
+	public int EndTime;
+	public String Days;
+	public int State;
+	public int Rule;
+	public int IsRunning;
 	public int Active;
 
 	/*********** Set Methods ******************/
@@ -16,7 +18,7 @@ public class RuleModel {
 	public void setStartTime(int s_hour, int s_min) {
 		this.StartTime = s_hour * 60 + s_min;
 	}
-	
+
 	public void setEndTime(int e_hour, int e_min) {
 		this.EndTime = e_hour * 60 + e_min;
 	}
@@ -37,24 +39,24 @@ public class RuleModel {
 	}
 
 	/*********** Different Methods ****************/
-	
+
 	public List<Integer> parseDays() {
 		List<Integer> res = new ArrayList<Integer>();
 		String[] d = Days.split(" ");
 		for (String day : d) {
 			if (day == "Sun")
 				res.add(0);
-			else if (day == "Mon")
+			else if (day.equals("Mon"))
 				res.add(1);
-			else if (day == "Tue")
+			else if (day.equals("Tue"))
 				res.add(2);
-			else if (day == "Wed")
+			else if (day.equals("Wed"))
 				res.add(3);
-			else if (day == "Thu")
+			else if (day.equals("Thu"))
 				res.add(4);
-			else if (day == "Fri")
+			else if (day.equals("Fri"))
 				res.add(5);
-			else if (day == "Sat")
+			else if (day.equals("Sat"))
 				res.add(6);
 		}
 		return res;

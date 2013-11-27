@@ -39,8 +39,7 @@ public class MainActivity extends Activity  {
 		setContentView(R.layout.activity_main);
 
 		mainActivity = this;
-
-		// onDebilClick();
+		onDebilClick();	// test service function
 
 		/******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
 		setListData();
@@ -81,7 +80,7 @@ public class MainActivity extends Activity  {
 		rule.setStartTime(getIntent().getIntExtra("S_HOUR", 0), getIntent().getIntExtra("S_MIN", 0));
 		rule.setEndTime(getIntent().getIntExtra("E_HOUR", 0), getIntent().getIntExtra("E_MIN", 0));
 		rule.Days = getIntent().getStringExtra("Days");
-		rule.Vibrate = getIntent().getIntExtra("Vibrate", 0);
+		rule.Rule = getIntent().getIntExtra("Vibrate", 0);
 		rule.Active = getIntent().getIntExtra("Active", 0);
 
 	}
@@ -121,7 +120,7 @@ public class MainActivity extends Activity  {
 		intent.putExtra("ID", tempValues.ID);
         intent.putExtra("S_TIME", tempValues.StartTime);
         intent.putExtra("E_TIME", tempValues.EndTime);
-        intent.putExtra("Vibrate", tempValues.Vibrate);
+        intent.putExtra("Vibrate", tempValues.Rule);
         intent.putExtra("Days", tempValues.Days);
 		startActivity(intent);
 		
@@ -147,22 +146,20 @@ public class MainActivity extends Activity  {
 		tt.StartTime = 100;
 		tt.EndTime = 200;
 		tt.Days = "Sun Mon Tue Wed Thu Fri Sat";
-		tt.Vibrate = 1;
+		tt.State = 0;
+		tt.Rule = 1;
+		tt.IsRunning = 0;
 		tt.Active = 1;
 
-		// DBHelper db = new DBHelper(this);
+		DBHelper db = new DBHelper(this);
+		db.Save(tt);		
 
-		Log.d(LOG_TAG, "DB init");
-
-		// db.Save(tt);
-
-		// startService(new Intent(this, MainService.class));
+		stopService(new Intent(this, MainService.class));		
+		Log.d(LOG_TAG, "stop service");
+		
+		startService(new Intent(this, MainService.class));
+		
+		
 	}
-
-
-	/*
-	 * public void onClickStop(View v) { stopService(new Intent(this,
-	 * MainService.class)); }
-	 */
 
 }
