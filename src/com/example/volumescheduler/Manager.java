@@ -7,11 +7,13 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Comparator;
 
+import android.content.Context;
+
 public class Manager {
 	
-	public static boolean ChekedRules(RuleModel ruleModel)
+	public static boolean ChekedRules(RuleModel ruleModel, Context context)
 	{
-		DBHelper dBHelper = new DBHelper(null);	
+		DBHelper dBHelper = new DBHelper(context);	
 		List<RuleModel> ruleList = dBHelper.getAll();
 		List<Integer> newRuleDayList = ruleModel.parseDays();
 		for (RuleModel rm : ruleList) {
@@ -36,20 +38,34 @@ public class Manager {
 		return true;
 	}
 	
-	public boolean CreateOrUdateRule(RuleModel ruleModel)
+	public List<RuleModel> GetList(Context context)
 	{
-		DBHelper dBHelper = new DBHelper(null);		
-		try {
-				//dbHelper.Save(ruleModel);	
-		} catch (Exception e) {
-			return false;
-		}
-		return true;
+		DBHelper dBHelper = new DBHelper(context);	
+		List<RuleModel> ruleList = dBHelper.getAll();
+		return ruleList;
 	}
-	private boolean DeleteRule(RuleModel ruleModel)
+	
+	public boolean CreateOrUdateRule(RuleModel ruleModel, Context context)
 	{
+		DBHelper dBHelper = new DBHelper(context);	
+		boolean isCheked = ChekedRules(ruleModel, context);
+		if(isCheked)
+		{	
+			try {
+				dBHelper.Save(ruleModel);
+				}
+			catch (Exception e) {
+				return false;
+			}	
+			return true;
+		}
+		return false;		
+	}
+	private boolean DeleteRule(RuleModel ruleModel, Context context)
+	{
+		DBHelper dBHelper = new DBHelper(context);	
 		try {
-				//dBHelper(ruleModel.ID);
+				dBHelper.Delete(ruleModel.ID);
 		} catch (Exception e) {
 			return false;
 		}
