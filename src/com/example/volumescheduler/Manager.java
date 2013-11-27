@@ -36,7 +36,7 @@ public class Manager {
 		return true;
 	}
 	
-	public void AhangeActiveRule(RuleModel ruleModel)
+	public void ChangeActiveRule(RuleModel ruleModel)
 	{
 		DBHelper dBHelper = new DBHelper(null);	
 		int ID = ruleModel.ID;
@@ -44,8 +44,7 @@ public class Manager {
 		for (RuleModel rule : oldRuleModelList) {
 			if(rule.ID == ID)
 			{
-				ruleModel.Active += 1;
-				ruleModel.Active /= 2;
+				ruleModel.Active ^= 1;
 			}
 		}		
 	}
