@@ -56,30 +56,35 @@ public class MainService extends Service {
               try {
             	  db = new DBHelper(MainService.this);                  
                   ttList = db.getAll();
+                  
+                  Log.d(LOG_TAG, "MainService db size: " + ttList.size());
+                  
                   curr_time = GetCurrentTime();
                   currentRuleModel = GetCurrentRule(curr_time);
                   if(currentRuleModel != null){
                   	SetRule(currentRuleModel.Rule);
+                  	next_time = GetEndRuleTime(currentRuleModel);
                   }
-                  next_time = GetNextRuleTime(curr_time);
+                  else{
+                	  next_time = GetNextRuleTime(curr_time);  
+                  }                 
                   
-                      while (true)
-                      {
-                              curr_time = GetCurrentTime();
-                              int sub = Time.compare(curr_time, next_time);
-                              if(sub > 0)
-                              {
-                            	  	currentRuleModel = GetCurrentRule(curr_time);
-                            	  	if(currentRuleModel != null){
-                                    	SetRule(currentRuleModel.Rule);
-                                    	next_time = GetEndRuleTime(currentRuleModel);
-                                    }
-                            	  	else{
-                            	  		next_time = GetNextRuleTime(curr_time);
-                            	  	}
-                              }
-                              TimeUnit.SECONDS.sleep(42);                      
-                          }
+                   while (true) {
+                	   curr_time = GetCurrentTime();
+                	   int sub = Time.compare(curr_time, next_time);
+                       Log.d(LOG_TAG, "MainService sub: " + sub);
+                       if(sub > 0) {
+                    	   currentRuleModel = GetCurrentRule(curr_time);
+                           if(currentRuleModel != null){
+                        	   SetRule(currentRuleModel.Rule);
+                               next_time = GetEndRuleTime(currentRuleModel);
+                           }
+                           else{
+                        	   next_time = GetNextRuleTime(curr_time);
+                           }
+                       }
+                       TimeUnit.SECONDS.sleep(20);                       
+                   }
               }
               catch (InterruptedException e) {
                       e.printStackTrace();
@@ -98,6 +103,7 @@ public class MainService extends Service {
             
             private void SetRule(int rule)
             {
+            	Log.d(LOG_TAG, "MainService set rule mode: " + rule);
                     AudioManager aManager = (AudioManager)getSystemService(AUDIO_SERVICE);
                 switch (rule) {
                 case AudioManager.RINGER_MODE_NORMAL:
@@ -146,7 +152,7 @@ public class MainService extends Service {
                     	}
                     }
                     
-                    if(min > 1500){
+                    if(min < 1500){
                     	if(res.EndTime - minOfDay > 0){
                     		return res;
                     	}
@@ -196,8 +202,8 @@ public class MainService extends Service {
             
             private Time GetEndRuleTime(RuleModel rm) {
             	Time t = GetCurrentTime();            	            	
-                t.hour = rm.StartTime / 60;
-                t.minute = rm.StartTime % 60;
+                t.hour = rm.EndTime / 60;
+                t.minute = rm.EndTime % 60;
                 return t;              
             }
             

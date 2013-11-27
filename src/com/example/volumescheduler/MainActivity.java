@@ -1,6 +1,7 @@
 package com.example.volumescheduler;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -143,23 +144,28 @@ public class MainActivity extends Activity  {
 	public void onDebilClick() {
 		RuleModel tt = new RuleModel();
 		tt.ID = 0;
-		tt.StartTime = 100;
-		tt.EndTime = 200;
+		tt.StartTime = 19;
+		tt.EndTime = 22;
 		tt.Days = "Sun Mon Tue Wed Thu Fri Sat";
 		tt.State = 0;
-		tt.Rule = 1;
+		tt.Rule = 0;
 		tt.IsRunning = 0;
 		tt.Active = 1;
 
 		DBHelper db = new DBHelper(this);
-		//db.Save(tt);		
+		//db.Save(tt);
+		
+		
+
+		
+		List<RuleModel> ttList = db.getAll();
+		db.close();
+		for (final RuleModel rm : ttList){
+			Log.d(LOG_TAG, "id=" + rm.ID + " sTime=" + rm.StartTime + " eTime=" + rm.EndTime + " rule=" + rm.Rule);
+		}
 
 		stopService(new Intent(this, MainService.class));		
-		Log.d(LOG_TAG, "stop service");
-		
-		startService(new Intent(this, MainService.class));
-		
-		
+		startService(new Intent(this, MainService.class));		
 	}
 
 }
