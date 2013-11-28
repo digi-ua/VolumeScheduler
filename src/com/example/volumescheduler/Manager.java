@@ -11,29 +11,33 @@ public class Manager {
 		List<RuleModel> ruleList = dBHelper.getAll();
 		int[] newRuleDayList = ruleModel.parseDaysBool();
 		for (RuleModel rm : ruleList) {
-			int[] tmpDayList = rm.parseDaysBool();
-			for (int i = 0; i < 7; i++) {
-				if((tmpDayList[i] == newRuleDayList[i]) && (tmpDayList[i] != 0 || newRuleDayList[i] != 0) )
-				{
-					if((rm.StartTime <= ruleModel.StartTime) && ((rm.EndTime >= ruleModel.StartTime) || (rm.EndTime <= ruleModel.EndTime)))
+			if(rm.ID != ruleModel.ID)
+			{
+				int[] tmpDayList = rm.parseDaysBool();
+				for (int i = 0; i < 7; i++) {
+					if((tmpDayList[i] == newRuleDayList[i]) && (tmpDayList[i] != 0 || newRuleDayList[i] != 0) )
 					{
-						return false;
-					}
-					
-					if((rm.EndTime >= ruleModel.StartTime) && ((rm.EndTime >= ruleModel.StartTime) || (rm.EndTime <= ruleModel.EndTime)))
-					{
-						return false;
+						if((rm.StartTime <= ruleModel.StartTime) && ((rm.EndTime >= ruleModel.StartTime) || (rm.EndTime <= ruleModel.EndTime)))
+							{
+								return false;
+							}
+						if((rm.EndTime >= ruleModel.StartTime) && ((rm.EndTime >= ruleModel.StartTime) || (rm.EndTime <= ruleModel.EndTime)))
+							{
+								return false;
+							}
+						return true;
 					}
 				}
 			}
-		}
+			else
+				return true;
+	}
 		return true;
 	}
 	
 	public List<RuleModel> GetList(Context context)
 	{
-		DBHelper dBHelper = new DBHelper(context);	
-		//List<RuleModel> ruleList = 
+		DBHelper dBHelper = new DBHelper(context);
 		return dBHelper.getAll();
 	}
 	
