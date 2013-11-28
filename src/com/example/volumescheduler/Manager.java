@@ -15,11 +15,11 @@ public class Manager {
 	{
 		DBHelper dBHelper = new DBHelper(context);	
 		List<RuleModel> ruleList = dBHelper.getAll();
-		List<Integer> newRuleDayList = ruleModel.parseDays();
+		int[] newRuleDayList = ruleModel.parseDaysBool();
 		for (RuleModel rm : ruleList) {
-			List<Integer> tmpDayList = rm.parseDays();
-			for (int i = 0; i < 6;) {
-				if(tmpDayList.get(i) == newRuleDayList.get(i))
+			int[] tmpDayList = rm.parseDaysBool();
+			for (int i = 0; i < 7; i++) {
+				if((tmpDayList[i] == newRuleDayList[i]) && (tmpDayList[i] != 0 || newRuleDayList[i] != 0) )
 				{
 					if((rm.StartTime <= ruleModel.StartTime) && (rm.EndTime > ruleModel.StartTime) && (rm.EndTime < ruleModel.EndTime))
 					{
@@ -31,8 +31,6 @@ public class Manager {
 						return false;
 					}
 				}
-				else
-					i++;
 			}
 		}
 		return true;
@@ -41,8 +39,8 @@ public class Manager {
 	public List<RuleModel> GetList(Context context)
 	{
 		DBHelper dBHelper = new DBHelper(context);	
-		List<RuleModel> ruleList = dBHelper.getAll();
-		return ruleList;
+		//List<RuleModel> ruleList = 
+		return dBHelper.getAll();
 	}
 	
 	public boolean CreateOrUdateRule(RuleModel ruleModel, Context context)
@@ -61,7 +59,7 @@ public class Manager {
 		}
 		return false;		
 	}
-	private boolean DeleteRule(RuleModel ruleModel, Context context)
+	public boolean DeleteRule(RuleModel ruleModel, Context context)
 	{
 		DBHelper dBHelper = new DBHelper(context);	
 		try {

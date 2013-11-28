@@ -14,9 +14,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
-public class CustomAdapter extends BaseAdapter implements OnClickListener,
-		OnCheckedChangeListener {
+public class CustomAdapter extends BaseAdapter implements OnClickListener {
 
 	/*********** Declare Used Variables *********/
 	private Activity activity;
@@ -67,7 +67,7 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener,
 	public View getView(int position, View convertView, ViewGroup parent) {
 
 		View vi = convertView;
-		ViewHolder holder;
+		final ViewHolder holder;
 
 		if (convertView == null) {
 
@@ -85,16 +85,27 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener,
 					.findViewById(R.id.tbx_rule_days);
 			holder.cbx_rule_active = (CheckBox) vi
 					.findViewById(R.id.cbx_rule_active);
+			
+			
 
+			
 			/************ Set holder with LayoutInflater ************/
 			vi.setTag(holder);
-		} else
-			holder = (ViewHolder) vi.getTag();
+			holder.cbx_rule_active.setTag(tempValues);
 
+		} else
+		{
+			//holder = (ViewHolder) vi.getTag();
+			vi = convertView;
+			((ViewHolder) vi.getTag()).cbx_rule_active.setTag(tempValues);
+		}
+		
+		ViewHolder holder1 = (ViewHolder) vi.getTag();
 		if (data.size() <= 0) {
-			holder.tbx_rule_days.setText("No Data");
-			holder.tbx_rule_start_time.setText("None");
-			holder.tbx_rule_end_time.setText("None");
+			holder1.tbx_rule_days.setText("No Data");
+			holder1.tbx_rule_start_time.setText("None");
+			holder1.tbx_rule_end_time.setText("None");
+			holder1.cbx_rule_active.setChecked(false);
 
 		} else {
 			/***** Get each Model object from Arraylist ********/
@@ -103,16 +114,30 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener,
 
 			/************ Set Model values in Holder elements ***********/
 
-			holder.tbx_rule_start_time.setText(tempValues.getStartTimeString());
-			holder.tbx_rule_end_time.setText(tempValues.getEndTimeString());
-			holder.tbx_rule_days.setText(tempValues.Days);
+			holder1.tbx_rule_start_time.setText(tempValues.getStartTimeString());
+			holder1.tbx_rule_end_time.setText(tempValues.getEndTimeString());
+			holder1.tbx_rule_days.setText(tempValues.Days);
 			if (tempValues.Active == 1)
-				holder.cbx_rule_active.setChecked(true);
+				holder1.cbx_rule_active.setChecked(true);
 
 			/******** Set Item Click Listner for LayoutInflater for each row *******/
 
 			vi.setOnClickListener(new OnItemClickListener(position));
+			
+			holder1.cbx_rule_active.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
+	            @Override
+	            public void onCheckedChanged(CompoundButton buttonView,
+	                boolean isChecked) {
+	              if(isChecked)
+	              {
+	            	  tempValues.Active = 1;
+	            	  Toast.makeText(activity, "Checked", Toast.LENGTH_SHORT).show();
+	              }
+	              else tempValues.Active = 0;
+
+	            }
+	          });
 		}
 		return vi;
 	}
@@ -120,31 +145,6 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener,
 	@Override
 	public void onClick(View v) {
 		Log.v("CustomAdapter", "=====Row button clicked=====");
-	}
-
-	private class setOnCheckedChangeListener implements
-			OnCheckedChangeListener, OnClickListener {
-		private int mPosition;
-
-		public setOnCheckedChangeListener(int position) {
-			mPosition = position;
-		}
-
-		@Override
-		public void onCheckedChanged(CompoundButton btn, boolean checked) {
-			MainActivity sct = (MainActivity) activity;
-
-			sct.onCheckItem(mPosition);
-
-		}
-
-		@Override
-		public void onClick(View arg0) {
-			MainActivity sct = (MainActivity) activity;
-
-			sct.onCheckItem(mPosition);
-		}
-
 	}
 
 	/********* Called when Item click in ListView ************/
@@ -167,14 +167,5 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener,
 
 			sct.onItemClick(mPosition);
 		}
-	}
-
-	@Override
-	public void onCheckedChanged(CompoundButton btn, boolean checked) {
-		MainActivity sct = (MainActivity) activity;
-		int position = 0;
-		if (checked)
-			sct.onCheckItem(position);
-
 	}
 }

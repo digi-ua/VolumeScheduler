@@ -1,6 +1,7 @@
 package com.example.volumescheduler;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -26,6 +27,8 @@ public class MainActivity extends Activity {
 	// DBHelper dbHelper;
 	final String LOG_TAG = "myLogs";
 
+	Manager mng = new Manager();;
+
 	ListView list;
 	CustomAdapter adapter;
 	public MainActivity mainActivity = null;
@@ -42,10 +45,11 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		mainActivity = this;
-		//onDebilClick();	// test service function
+		//onDebilClick(); // test service function
 
 		/******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
-		setListData();
+		// setListData();
+		FromDBtoList();
 
 		list = (ListView) findViewById(R.id.list);
 
@@ -54,34 +58,28 @@ public class MainActivity extends Activity {
 		/**************** Create Custom Adapter *********/
 		adapter = new CustomAdapter(mainActivity, CustomListViewValuesArr);
 		list.setAdapter(adapter);
+	}
+
+	public void FromDBtoList() {
+
+		List<RuleModel> rules = mng.GetList(this);
+
+		for (RuleModel model : rules) {
+			CustomListViewValuesArr.add(model);
+		}
 
 	}
-	
-	public void FromDBtoList()
-	{
-		//Тут заповняєм лістВЮ при запуску . Через метод з манаджера.
-		/******
-		  
-		 List<RuleModel> rules = Manager.getRuleList();
-		 
-		 for(int i = 0; i < list.lenght; i ++)
-		 {
-		 	CustomListViewValuesArr.add(rules[i]);
-		 }
-		  
-		 
-		 ******/
-	}
-	
-	
-	///мабуть не треба цього методу
+
+	// /мабуть не треба цього методу
 	public void getIntents() {
-		
+
 		final RuleModel rule = new RuleModel();
-		
+
 		rule.ID = getIntent().getIntExtra("ID", 0);
-		rule.setStartTime(getIntent().getIntExtra("S_HOUR", 0), getIntent().getIntExtra("S_MIN", 0));
-		rule.setEndTime(getIntent().getIntExtra("E_HOUR", 0), getIntent().getIntExtra("E_MIN", 0));
+		rule.setStartTime(getIntent().getIntExtra("S_HOUR", 0), getIntent()
+				.getIntExtra("S_MIN", 0));
+		rule.setEndTime(getIntent().getIntExtra("E_HOUR", 0), getIntent()
+				.getIntExtra("E_MIN", 0));
 		rule.Days = getIntent().getStringExtra("Days");
 		rule.Rule = getIntent().getIntExtra("Vibrate", 0);
 		rule.Active = getIntent().getIntExtra("Active", 0);
@@ -105,32 +103,33 @@ public class MainActivity extends Activity {
 		}
 
 	}
-	public void onCheckItem(int mPosition)
-	{
+
+	public void onCheckItem(int mPosition) {
 		Toast.makeText(this, "Item Checked", Toast.LENGTH_SHORT);
 	}
-	
+
 	public void onItemClick(int mPosition) {
 		RuleModel tempValues = (RuleModel) CustomListViewValuesArr
 				.get(mPosition);
 
 		// SHOW ALERT
 		/*
-		Toast.makeText(
-				mainActivity,
-				"" + tempValues.StartTime + " min " + "-"
-						+ tempValues.EndTime + " min " + "--Days: "
-						+ tempValues.Days, Toast.LENGTH_LONG).show();
-						*/
+		 * Toast.makeText( mainActivity, "" + tempValues.StartTime + " min " +
+		 * "-" + tempValues.EndTime + " min " + "--Days: " + tempValues.Days,
+		 * Toast.LENGTH_LONG).show();
+		 */
 		Intent intent = new Intent(this, AddRule.class);
 		intent.putExtra("MODE", 2);
 		intent.putExtra("ID", tempValues.ID);
-        intent.putExtra("S_TIME", tempValues.StartTime);
-        intent.putExtra("E_TIME", tempValues.EndTime);
-        intent.putExtra("Vibrate", tempValues.Rule);
-        intent.putExtra("Days", tempValues.Days);
+		intent.putExtra("S_TIME", tempValues.StartTime);
+		intent.putExtra("E_TIME", tempValues.EndTime);
+		intent.putExtra("Vibrate", tempValues.Rule);
+		intent.putExtra("Days", tempValues.Days);
+		intent.putExtra("State", tempValues.State);
+		intent.putExtra("IsRunning", tempValues.IsRunning);
+		intent.putExtra("Active", tempValues.Active);
 		startActivity(intent);
-		
+
 	}
 
 	public void onClick(View v) {
@@ -138,6 +137,8 @@ public class MainActivity extends Activity {
 		switch (v.getId()) {
 		case R.id.btn_add: {
 			Intent intent = new Intent(v.getContext(), AddRule.class);
+			
+			//startActivityForResults(intent, MY_REQUEST_CODE);
 			startActivity(intent);
 		}
 			break;
@@ -150,23 +151,35 @@ public class MainActivity extends Activity {
 	public void onDebilClick() {
 		RuleModel tt = new RuleModel();
 		tt.ID = 0;
-		tt.StartTime = 100;
-		tt.EndTime = 200;
-		tt.Days = "Sun Mon Tue Wed Thu Fri Sat";
+		tt.StartTime = 50;
+		tt.EndTime = 432;
+		tt.Days = "Fri";
 		tt.State = 0;
 		tt.Rule = 1;
 		tt.IsRunning = 0;
 		tt.Active = 1;
+		RuleModel tt1 = new RuleModel();
+		tt1.ID = 0;
+		tt1.StartTime = 100;
+		tt1.EndTime = 300;
+		tt1.Days = "Sat Sun";
+		tt1.State = 0;
+		tt1.Rule = 1;
+		tt1.IsRunning = 0;
+		tt1.Active = 1;
 
 		DBHelper db = new DBHelper(this);
-		//db.Save(tt);		
 
-		stopService(new Intent(this, MainService.class));		
-		Log.d(LOG_TAG, "stop service");
-		
-		startService(new Intent(this, MainService.class));
-		
-		
+		db.Save(tt);
+		//db.Save(tt1);
+
+		//stopService(new Intent(this, MainService.class));
+		//Log.d(LOG_TAG, "stop service");
+
+		//startService(new Intent(this, MainService.class));
+
 	}
+	
+
 
 }

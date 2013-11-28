@@ -40,11 +40,35 @@ public class RuleModel {
 
 	/*********** Different Methods ****************/
 
+	public int[] parseDaysBool()
+	{
+		int[] b = {0, 0, 0, 0, 0, 0, 0};
+		String[] d = Days.split(" ");
+		String[] days = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",	"Sun" };
+		
+		for(int i = 0; i < days.length; i++)
+		{
+			for(String d_ : d)
+				if (d_.equals(days[i]))
+					b[i] = i + 1;
+			
+			/*
+			for(String d_ : d)
+			{
+				if(d_.equals(days[i]))
+					b[i] = true;
+			}
+			*/
+		}
+		return b;
+	}
+	
 	public List<Integer> parseDays() {
 		List<Integer> res = new ArrayList<Integer>();
 		String[] d = Days.split(" ");
+	
 		for (String day : d) {
-			if (day == "Sun")
+			if (day.equals("Sun"))
 				res.add(0);
 			else if (day.equals("Mon"))
 				res.add(1);
@@ -59,6 +83,7 @@ public class RuleModel {
 			else if (day.equals("Sat"))
 				res.add(6);
 		}
+
 		return res;
 	}
 }
