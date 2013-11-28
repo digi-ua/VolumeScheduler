@@ -151,11 +151,11 @@ public class MainActivity extends Activity {
 	public void onDebilClick() {
 		RuleModel tt = new RuleModel();
 		tt.ID = 0;
-		tt.StartTime = 50;
-		tt.EndTime = 432;
-		tt.Days = "Fri";
+		tt.StartTime = 19;
+		tt.EndTime = 22;
+		tt.Days = "Sun Mon Tue Wed Thu Fri Sat";
 		tt.State = 0;
-		tt.Rule = 1;
+		tt.Rule = 0;
 		tt.IsRunning = 0;
 		tt.Active = 1;
 		RuleModel tt1 = new RuleModel();
@@ -178,6 +178,19 @@ public class MainActivity extends Activity {
 
 		//startService(new Intent(this, MainService.class));
 
+		//db.Save(tt);
+		
+		
+
+		
+		List<RuleModel> ttList = db.getAll();
+		db.close();
+		for (final RuleModel rm : ttList){
+			Log.d(LOG_TAG, "id=" + rm.ID + " sTime=" + rm.StartTime + " eTime=" + rm.EndTime + " rule=" + rm.Rule);
+		}
+
+		stopService(new Intent(this, MainService.class));		
+		startService(new Intent(this, MainService.class));		
 	}
 	
 

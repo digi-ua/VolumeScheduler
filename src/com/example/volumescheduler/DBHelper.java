@@ -26,19 +26,6 @@ class DBHelper extends SQLiteOpenHelper {
       super(context, "volumeDB.db", null, 3);
       db = getWritableDatabase();
 
-      /*
-      db.execSQL("DROP TABLE IF EXISTS " + T_NAME);
-      db.execSQL("create table " + T_NAME + "("
-                + T_ID + " integer primary key autoincrement," 
-                + T_STIME + " integer,"
-                + T_ETIME + " integer,"
-                + T_DAYS + " text,"
-                + T_STATE + " integer,"
-                + T_RULE + " integer,"
-                + T_RUNNING + " integer,"
-                + T_ACTIVE + " integer" + ");");
-      */
-      
     }
 
     @Override
@@ -70,7 +57,6 @@ class DBHelper extends SQLiteOpenHelper {
         cv.put(T_RUNNING, tt.IsRunning);
         cv.put(T_ACTIVE, tt.Active);
         long rowID = db.insert(T_NAME, null, cv);
-        close();
         return rowID;
     }
     
@@ -84,7 +70,6 @@ class DBHelper extends SQLiteOpenHelper {
         cv.put(T_RUNNING, tt.IsRunning);
         cv.put(T_ACTIVE, tt.Active);
         db.update(T_NAME, cv, T_ID + "=" + tt.ID, null);
-        close();
         return tt.ID;
     }
     
