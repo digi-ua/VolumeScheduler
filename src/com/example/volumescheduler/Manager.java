@@ -1,12 +1,6 @@
 package com.example.volumescheduler;
 
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Comparator;
-
 import android.content.Context;
 
 public class Manager {
@@ -21,12 +15,12 @@ public class Manager {
 			for (int i = 0; i < 7; i++) {
 				if((tmpDayList[i] == newRuleDayList[i]) && (tmpDayList[i] != 0 || newRuleDayList[i] != 0) )
 				{
-					if((rm.StartTime <= ruleModel.StartTime) && (rm.EndTime > ruleModel.StartTime) && (rm.EndTime < ruleModel.EndTime))
+					if((rm.StartTime <= ruleModel.StartTime) && ((rm.EndTime >= ruleModel.StartTime) || (rm.EndTime <= ruleModel.EndTime)))
 					{
 						return false;
 					}
 					
-					if((rm.EndTime >= ruleModel.StartTime) && (rm.EndTime > ruleModel.StartTime) && (rm.EndTime < ruleModel.EndTime))
+					if((rm.EndTime >= ruleModel.StartTime) && ((rm.EndTime >= ruleModel.StartTime) || (rm.EndTime <= ruleModel.EndTime)))
 					{
 						return false;
 					}
