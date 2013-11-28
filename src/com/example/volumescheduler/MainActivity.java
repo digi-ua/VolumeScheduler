@@ -45,7 +45,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 
 		mainActivity = this;
-		//onDebilClick(); // test service function
+		onDebilClick(); // test service function
 
 		/******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
 		// setListData();
@@ -151,32 +151,23 @@ public class MainActivity extends Activity {
 	public void onDebilClick() {
 		RuleModel tt = new RuleModel();
 		tt.ID = 0;
-		tt.StartTime = 19;
-		tt.EndTime = 22;
+		tt.StartTime = 275;
+		tt.EndTime = 278;
 		tt.Days = "Sun Mon Tue Wed Thu Fri Sat";
 		tt.State = 0;
-		tt.Rule = 0;
+		tt.Rule = 1;
 		tt.IsRunning = 0;
 		tt.Active = 1;
-		RuleModel tt1 = new RuleModel();
-		tt1.ID = 0;
-		tt1.StartTime = 100;
-		tt1.EndTime = 300;
-		tt1.Days = "Sat Sun";
-		tt1.State = 0;
-		tt1.Rule = 1;
-		tt1.IsRunning = 0;
-		tt1.Active = 1;
-
+		
 		DBHelper db = new DBHelper(this);
 
 		db.Save(tt);
 		//db.Save(tt1);
 
-		//stopService(new Intent(this, MainService.class));
+		stopService(new Intent(this, MainService.class));
 		//Log.d(LOG_TAG, "stop service");
 
-		//startService(new Intent(this, MainService.class));
+		startService(new Intent(this, MainService.class));
 
 		//db.Save(tt);
 		

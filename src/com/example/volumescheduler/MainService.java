@@ -73,17 +73,28 @@ public class MainService extends Service {
                 	   curr_time = GetCurrentTime();
                 	   int sub = Time.compare(curr_time, next_time);
                        Log.d(LOG_TAG, "MainService sub: " + sub);
-                       if(sub > 0) {
+                       if(sub > 0) {         
+                    	   if(currentRuleModel != null){
+                    		   SetRule(currentRuleModel.State);
+                    	   }
+                    	   
                     	   currentRuleModel = GetCurrentRule(curr_time);
+                    	   
                            if(currentRuleModel != null){
                         	   SetRule(currentRuleModel.Rule);
                                next_time = GetEndRuleTime(currentRuleModel);
                            }
-                           else{
+                           else{                        	   
                         	   next_time = GetNextRuleTime(curr_time);
                            }
                        }
-                       TimeUnit.SECONDS.sleep(20);                       
+                       TimeUnit.SECONDS.sleep(20);
+                       if(currentRuleModel != null){
+                    	   currentRuleModel.State = GetRingerMode();
+                    	   db.Save(currentRuleModel);    
+                       }
+                       
+                       
                    }
               }
               catch (InterruptedException e) {
@@ -117,13 +128,11 @@ public class MainService extends Service {
                         break;
                 }
             }
-            
-            /*
+                        
             private int GetRingerMode() {
-                    AudioManager aManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);            
+                    AudioManager aManager = (AudioManager) getSystemService(AUDIO_SERVICE);            
                     return aManager.getRingerMode();
             }
-           */
             
             private RuleModel GetCurrentRule(Time t) {
                     int minOfDay = t.minute + t.hour * 60;                    
@@ -152,7 +161,7 @@ public class MainService extends Service {
                     	}
                     }
                     
-                    if(min < 1500){
+                    if(min < Integer.MAX_VALUE){
                     	if(res.EndTime - minOfDay > 0){
                     		return res;
                     	}
