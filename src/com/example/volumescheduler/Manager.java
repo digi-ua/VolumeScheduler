@@ -1,3 +1,4 @@
+
 package com.example.volumescheduler;
 
 import java.util.List;
@@ -36,24 +37,27 @@ public class Manager {
 		return new DBHelper(context).getAll();
 	}
 
-	public boolean CreateOrUdateRule(RuleModel ruleModel, Context context) {
-		DBHelper dBHelper = new DBHelper(context);
+	public boolean CreateOrUdateRule(RuleModel ruleModel, Context context)
+	{
+		DBHelper dBHelper = new DBHelper(context);	
 		boolean isCheked = ChekedRules(ruleModel, context);
-		if (isCheked) {
+		if(isCheked)
+		{	
 			try {
 				dBHelper.Save(ruleModel);
-			} catch (Exception e) {
+				}
+			catch (Exception e) {
 				return false;
-			}
+			}	
 			return true;
 		}
-		return false;
+		return false;		
 	}
-
-	public boolean DeleteRule(RuleModel ruleModel, Context context) {
-		DBHelper dBHelper = new DBHelper(context);
+	public boolean DeleteRule(RuleModel ruleModel, Context context)
+	{
+		DBHelper dBHelper = new DBHelper(context);	
 		try {
-			dBHelper.Delete(ruleModel.ID);
+				dBHelper.Delete(ruleModel.ID);
 		} catch (Exception e) {
 			return false;
 		}

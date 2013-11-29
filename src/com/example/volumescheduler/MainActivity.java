@@ -139,10 +139,6 @@ public class MainActivity extends Activity {
 		tt.IsRunning = 0;
 		tt.Active = 1;
 
-		// DBHelper db = new DBHelper(this);
-
-		// db.Save(tt);
-		// db.Save(tt1);
 
 		stopService(new Intent(this, MainService.class));
 		// Log.d(LOG_TAG, "stop service");
