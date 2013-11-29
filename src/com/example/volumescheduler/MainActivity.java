@@ -161,7 +161,7 @@ public class MainActivity extends Activity {
 		
 		DBHelper db = new DBHelper(this);
 
-		db.Save(tt);
+		//db.Save(tt);
 		//db.Save(tt1);
 
 		stopService(new Intent(this, MainService.class));
