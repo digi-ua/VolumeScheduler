@@ -11,7 +11,7 @@ public class Manager {
 		
 		DBHelper dBHelper = new DBHelper(context);
 		List<RuleModel> ruleList = dBHelper.getAll();
-		if (ruleModel.StartTime > ruleModel.EndTime)
+		if (ruleModel.StartTime >= ruleModel.EndTime || ruleModel.Days == "")
 			return false;
 		int[] newRuleDayList = ruleModel.parseDaysBool();
 		for (RuleModel rm : ruleList) {
