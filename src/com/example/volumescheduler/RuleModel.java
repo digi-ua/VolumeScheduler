@@ -29,7 +29,9 @@ public class RuleModel {
 	public String getStartTimeString() {
 		int hour = StartTime / 60;
 		int min = StartTime % 60;
-		return Integer.toString(hour) + ":" + Integer.toString(min);
+		String s_h = hour/10 == 0 ? "0" + Integer.toString(hour) : Integer.toString(hour);
+		String s_m = min/10 == 0 ? "0" + Integer.toString(min) : Integer.toString(min);
+		return s_h + ":" + s_m;
 	}
 
 	public String getEndTimeString() {
@@ -51,14 +53,6 @@ public class RuleModel {
 			for(String d_ : d)
 				if (d_.equals(days[i]))
 					b[i] = i + 1;
-			
-			/*
-			for(String d_ : d)
-			{
-				if(d_.equals(days[i]))
-					b[i] = true;
-			}
-			*/
 		}
 		return b;
 	}

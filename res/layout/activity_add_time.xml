@@ -15,6 +15,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
             android:gravity="center"
             android:orientation="vertical" >
 
@@ -24,8 +25,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="Start time:"
-                
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textColor="@android:color/darker_gray"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="14sp" />
 
             <TimePicker
                 android:id="@+id/timePickerS"
@@ -39,7 +41,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="End time:"
-                android:textAppearance="?android:attr/textAppearanceMedium" />
+                android:textColor="@android:color/darker_gray"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textSize="14sp" />
 
             <TimePicker
                 android:id="@+id/timePickerE"

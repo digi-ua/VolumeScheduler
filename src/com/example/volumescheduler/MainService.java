@@ -72,11 +72,11 @@ public class MainService extends Service {
                    while (true) {
                 	   curr_time = GetCurrentTime();
                 	   int sub = Time.compare(curr_time, next_time);
-                       Log.d(LOG_TAG, "MainService sub: " + sub);
+                       Log.d(LOG_TAG, "MainService sub: " + sub + " " + curr_time + " " + next_time);
                        if(sub > 0) {         
-                    	   if(currentRuleModel != null){
-                    		   SetRule(currentRuleModel.State);
-                    	   }
+                    	   //if(currentRuleModel != null){
+                    	//	   SetRule(currentRuleModel.State);
+                    	  // }
                     	   
                     	   currentRuleModel = GetCurrentRule(curr_time);
                     	   
@@ -138,7 +138,7 @@ public class MainService extends Service {
                     int minOfDay = t.minute + t.hour * 60;                    
                     int day = t.weekDay;
                     int min = Integer.MAX_VALUE;
-                    
+                                        
                     List<Integer> rdays = new ArrayList<Integer>();                    		
                     RuleModel res = null;                    
                     
@@ -146,6 +146,7 @@ public class MainService extends Service {
                     	
                     	rdays = tt.parseDays();                    	
                     	int rday = -1;
+                    	
                     	for(int i = 0; i < rdays.size(); i++){
                     		if(rdays.get(i) == day){
                     			rday = day;

@@ -2,9 +2,11 @@ package com.example.volumescheduler;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.format.DateFormat;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +55,8 @@ public class AddRule extends Activity {
 	private String[] days_name = { "Mon", "Tue", "Wed", "Thu", "Fri", "Sat",
 			"Sun" };
 
+	
+	
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
@@ -78,16 +82,20 @@ public class AddRule extends Activity {
 			case 0:
 				tbx_vibrate.setText("Checked");
 				tgl_vibrate.setChecked(true);
+				vRule = 1;
 				break;
 			case 1:
 				tbx_silent.setText("Checked");
 				tgl_silent.setChecked(true);
+				sRule = 1;
 				break;
 			case 2:
 				tbx_vibrate.setText("Checked");
 				tgl_vibrate.setChecked(true);
 				tbx_silent.setText("Checked");
 				tgl_silent.setChecked(true);
+				sRule = 1;
+				vRule = 1;
 				break;
 
 			default:
@@ -96,8 +104,8 @@ public class AddRule extends Activity {
 			tgl_active.setChecked(Active == 1 ? true : false);
 			btn_addDays.setText(R.string.btn_days_edit);
 			btn_addTime.setText(R.string.btn_time_edit);
-
-			time.setText(S_HOUR + ":" + S_MIN + " - " + E_HOUR + ":" + E_MIN);
+			
+			tbxTimeUpdate();
 			tbx_days.setText(Days);
 		}
 		tgl_vibrate
@@ -144,17 +152,15 @@ public class AddRule extends Activity {
 			if (!mng.CreateOrUdateRule(ruleModel(), this))
 				Toast.makeText(this, "Invalid data", Toast.LENGTH_SHORT).show();
 			else {
-				Intent intent = new Intent(v.getContext(), MainActivity.class);
-				startActivity(intent);
+				getApplicationContext().sendBroadcast(new Intent(MainActivity.ACTION_RULELIST_UPDATE));
+				this.finish();
 			}
 			break;
 		case R.id.btn_delete:
 			if (!mng.DeleteRule(ruleModel(), this))
 				Toast.makeText(this, "Exeption", Toast.LENGTH_SHORT).show();
 			else {
-				Intent intent = new Intent(v.getContext(), MainActivity.class);
-				intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-				startActivity(intent);
+				getApplicationContext().sendBroadcast(new Intent(MainActivity.ACTION_RULELIST_UPDATE));
 				this.finish();
 				// this.finish();
 			}
@@ -227,7 +233,10 @@ public class AddRule extends Activity {
 
 		TimePicker timeS = (TimePicker) content.findViewById(R.id.timePickerS);
 		TimePicker timeE = (TimePicker) content.findViewById(R.id.timePickerE);
-
+		
+		timeS.setIs24HourView(DateFormat.is24HourFormat(this));
+		timeE.setIs24HourView(DateFormat.is24HourFormat(this));
+		
 		timeS.setCurrentHour(S_HOUR);
 		timeS.setCurrentMinute(S_MIN);
 
@@ -265,10 +274,20 @@ public class AddRule extends Activity {
 				E_MIN = e_min;
 				time.setText(s_hour + ":" + s_min + " - " + e_hour + ":"
 						+ e_min);
+				tbxTimeUpdate();
 			}
 		});
 
 		builder.create().show();
+	}
+	
+	public void tbxTimeUpdate()
+	{
+		String s_h = S_HOUR/10 == 0 ? "0" + Integer.toString(S_HOUR) : Integer.toString(S_HOUR);
+		String s_m = S_MIN/10 == 0 ? "0" + Integer.toString(S_MIN) : Integer.toString(S_MIN);
+		String e_h = E_HOUR/10 == 0 ? "0" + Integer.toString(E_HOUR) : Integer.toString(E_HOUR);
+		String e_m = E_MIN/10 == 0 ? "0" + Integer.toString(E_MIN) : Integer.toString(E_MIN);
+		time.setText(s_h + ":" + s_m + " - " + e_h + ":" + e_m);
 	}
 
 	public void getParametrs() {
@@ -303,11 +322,5 @@ public class AddRule extends Activity {
 		else
 			rule.Rule = 0;
 		return rule;
-	}
-
-	@Override
-	public void onBackPressed() {
-		// code here to show dialog
-		super.onBackPressed(); // optional depending on your needs
 	}
 }

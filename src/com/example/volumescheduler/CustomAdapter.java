@@ -23,6 +23,7 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 	private ArrayList data;
 	private static LayoutInflater inflater = null;
 	RuleModel tempValues = null;
+	Manager mng = new Manager();
 	int i = 0;
 
 	/************* CustomAdapter Constructor *****************/
@@ -85,21 +86,17 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 					.findViewById(R.id.tbx_rule_days);
 			holder.cbx_rule_active = (CheckBox) vi
 					.findViewById(R.id.cbx_rule_active);
-			
-			
 
-			
 			/************ Set holder with LayoutInflater ************/
 			vi.setTag(holder);
 			holder.cbx_rule_active.setTag(tempValues);
 
-		} else
-		{
-			//holder = (ViewHolder) vi.getTag();
+		} else {
+			// holder = (ViewHolder) vi.getTag();
 			vi = convertView;
 			((ViewHolder) vi.getTag()).cbx_rule_active.setTag(tempValues);
 		}
-		
+
 		ViewHolder holder1 = (ViewHolder) vi.getTag();
 		if (data.size() <= 0) {
 			holder1.tbx_rule_days.setText("No Data");
@@ -114,7 +111,8 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 
 			/************ Set Model values in Holder elements ***********/
 
-			holder1.tbx_rule_start_time.setText(tempValues.getStartTimeString());
+			holder1.tbx_rule_start_time
+					.setText(tempValues.getStartTimeString());
 			holder1.tbx_rule_end_time.setText(tempValues.getEndTimeString());
 			holder1.tbx_rule_days.setText(tempValues.Days);
 			if (tempValues.Active == 1)
@@ -123,21 +121,26 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 			/******** Set Item Click Listner for LayoutInflater for each row *******/
 
 			vi.setOnClickListener(new OnItemClickListener(position));
-			
-			holder1.cbx_rule_active.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-	            @Override
-	            public void onCheckedChanged(CompoundButton buttonView,
-	                boolean isChecked) {
-	              if(isChecked)
-	              {
-	            	  tempValues.Active = 1;
-	            	  Toast.makeText(activity, "Checked", Toast.LENGTH_SHORT).show();
-	              }
-	              else tempValues.Active = 0;
+			holder1.cbx_rule_active
+					.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
-	            }
-	          });
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							MainActivity sct = (MainActivity) activity;
+							
+							if (isChecked) {
+								tempValues.Active = 1;
+								Toast.makeText(activity, "Checked",
+										Toast.LENGTH_SHORT).show();
+								
+							} else
+								tempValues.Active = 0;
+							mng.CreateOrUdateRule(tempValues, activity);
+							sct.FromDBtoList();
+						}
+					});
 		}
 		return vi;
 	}
