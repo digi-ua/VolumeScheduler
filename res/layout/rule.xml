@@ -12,9 +12,11 @@
 
         <LinearLayout
             android:id="@+id/linearLayout1"
-            android:layout_width="10dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
             android:layout_weight="1"
+            android:gravity="center"
             android:orientation="vertical" >
 
             <TextView
@@ -36,9 +38,11 @@
             android:id="@+id/tbx_rule_days"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
             android:layout_weight="1"
             android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textSize="12sp" />
 
         <CheckBox
             android:id="@+id/cbx_rule_active"

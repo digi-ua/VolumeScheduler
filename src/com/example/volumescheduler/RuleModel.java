@@ -37,7 +37,9 @@ public class RuleModel {
 	public String getEndTimeString() {
 		int hour = EndTime / 60;
 		int min = EndTime % 60;
-		return Integer.toString(hour) + ":" + Integer.toString(min);
+		String e_h = hour/10 == 0 ? "0" + Integer.toString(hour) : Integer.toString(hour);
+		String e_m = min/10 == 0 ? "0" + Integer.toString(min) : Integer.toString(min);
+		return e_h + ":" + e_m;
 	}
 
 	/*********** Different Methods ****************/
