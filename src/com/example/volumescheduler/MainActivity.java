@@ -2,24 +2,11 @@ package com.example.volumescheduler;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.webkit.WebChromeClient.CustomViewCallback;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageButton;
-import android.widget.Toast;
-//import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -27,25 +14,23 @@ import android.content.IntentFilter;
 
 public class MainActivity extends Activity {
 
-	// DBHelper dbHelper;
-	final String LOG_TAG = "myLogs";
 	public static final String ACTION_RULELIST_UPDATE = "com.example.volumesheduler.RULELIST_UPDATE";
 
-	Manager mng = new Manager();;
+	Manager mng = new Manager();
 
 	ListView list;
 	CustomAdapter adapter;
-	public MainActivity mainActivity = null;
-	public ArrayList<RuleModel> CustomListViewValuesArr = new ArrayList<RuleModel>();
-	private ImageButton btn_add;
-	private String[] rule_days = { "Mon Tue Fri", "Tue Wed", "Fri Sun" };
+	public List<RuleModel> CustomListViewValuesArr = new ArrayList<RuleModel>();
 
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
 		@Override
 		public void onReceive(Context arg0, Intent arg1) {
+			Log.d("------", "-------");
+			Log.d("------", "-------");
 			Log.d("Receiver", "onReceive");
 			FromDBtoList();
+			list.setAdapter(adapter);
 
 		}
 	};
@@ -59,38 +44,47 @@ public class MainActivity extends Activity {
 		intentFilter.addAction(ACTION_RULELIST_UPDATE);
 		registerReceiver(broadcastReceiver, intentFilter);
 
-		mainActivity = this;
 		// onDebilClick(); // test service function
 
-		/******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
-
 		list = (ListView) findViewById(R.id.list);
-
-		btn_add = (ImageButton) findViewById(R.id.btn_add);
-
+		/******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
+		
 		FromDBtoList();
 
 		/**************** Create Custom Adapter *********/
+
+		adapter = new CustomAdapter(this, CustomListViewValuesArr);
+
+		Log.d("MainActivity_OnCreate", "CustomAdaper is created -- Size: "
+				+ adapter.getCount());
+		Log.d("------", "-------");
+		Log.d("------", "-------");
+
+		list.setAdapter(adapter);
 	}
 
 	@Override
 	protected void onDestroy() {
+		Log.d("MainActivity", "OnDestroy !!");
+		Log.d("------", "-------");
+		Log.d("------", "-------");
 		unregisterReceiver(broadcastReceiver);
 		super.onDestroy();
 	}
 
 	public void FromDBtoList() {
-
-		List<RuleModel> rules = mng.GetList(this);
-
+		
 		CustomListViewValuesArr.clear();
+		
+		List<RuleModel> rules = mng.GetList(this);
 
 		for (RuleModel model : rules)
 			CustomListViewValuesArr.add(model);
-		
-		adapter = new CustomAdapter(mainActivity, CustomListViewValuesArr);
 
-		list.setAdapter(adapter);
+		Log.d("MainActivity", "CustomList is created: Size: "
+				+ CustomListViewValuesArr.size());
+		Log.d("------", "-------");
+		Log.d("------", "-------");
 
 	}
 
@@ -99,7 +93,6 @@ public class MainActivity extends Activity {
 	public void onItemClick(int mPosition) {
 		RuleModel tempValues = (RuleModel) CustomListViewValuesArr
 				.get(mPosition);
-
 		Intent intent = new Intent(this, AddRule.class);
 		intent.putExtra("MODE", 2);
 		intent.putExtra("ID", tempValues.ID);
@@ -139,7 +132,6 @@ public class MainActivity extends Activity {
 		tt.IsRunning = 0;
 		tt.Active = 1;
 
-
 		stopService(new Intent(this, MainService.class));
 		// Log.d(LOG_TAG, "stop service");
 
@@ -150,7 +142,7 @@ public class MainActivity extends Activity {
 		// List<RuleModel> ttList = db.getAll();
 		// db.close();
 		// for (final RuleModel rm : ttList){
-		// Log.d(LOG_TAG, "id=" + rm.ID + " sTime=" + rm.StartTime + " eTime=" +
+		// Log.d("LOG", "id=" + rm.ID + " sTime=" + rm.StartTime + " eTime=" +
 		// rm.EndTime + " rule=" + rm.Rule);
 		// }
 

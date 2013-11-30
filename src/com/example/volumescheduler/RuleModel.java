@@ -13,6 +13,22 @@ public class RuleModel {
 	public int IsRunning;
 	public int Active;
 
+	/*********** Constructor ******************/
+	
+	RuleModel() {}
+	
+	RuleModel(int id, int s_time, int e_time, String days, int rule, int active)
+	{
+		ID = id;
+		StartTime = s_time;
+		EndTime = e_time;
+		Days = days;
+		Rule = rule;
+		Active = active;
+		State = 0;
+		IsRunning = 0;
+	}
+	
 	/*********** Set Methods ******************/
 
 	public void setStartTime(int s_hour, int s_min) {

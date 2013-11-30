@@ -7,16 +7,16 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin" >
 
-    <TableRow
-        android:background="@drawable/rule_bg">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/rule_bg" >
 
         <LinearLayout
-            android:id="@+id/linearLayout1"
+            android:id="@+id/l_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:gravity="center"
             android:orientation="vertical" >
 
             <TextView
@@ -24,31 +24,92 @@
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="S_TIME" />
 
             <TextView
                 android:id="@+id/tbx_time_end"
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
                 android:layout_weight="1"
-                android:text="TextView" />
+                android:text="E_TIME" />
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tbx_rule_days"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right|center_vertical"
-            android:layout_weight="1"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textSize="12sp" />
 
         <CheckBox
             android:id="@+id/cbx_rule_active"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-       
-    </TableRow>
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:id="@+id/l_center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/cbx_rule_active"
+            android:layout_toRightOf="@id/l_time"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:id="@+id/l_days"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/tbx_rule_days"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Days"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" >
+
+                <TextView
+                    android:id="@+id/tbx_textVibrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Vibrate: "
+                    android:textSize="10sp"
+                    android:textColor="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/tbx_ruleVibrate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="15dp"
+                    android:text="on"
+                    android:textSize="10sp" />
+
+                <TextView
+                    android:id="@+id/tbx_textSilent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="Silent: "
+                    android:textSize="10sp"
+                    android:textColor="@android:color/darker_gray" />
+
+                <TextView
+                    android:id="@+id/tbx_ruleSilent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="on"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </TableLayout>

@@ -14,24 +14,39 @@
         android:layout_height="wrap_content"
         android:padding="1dp" >
 
-        <ImageButton
-            android:id="@+id/btn_submit"
-            android:layout_width="200dp"
-            android:layout_height="40dp"
-            android:layout_alignParentLeft="true"
-            android:layout_centerVertical="true"
-            android:onClick="onClick"
-            android:src="@drawable/submit_black" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
 
-        <ImageButton
-            android:id="@+id/btn_delete"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentRight="true"
-            android:layout_centerInParent="false"
-            android:layout_centerVertical="true"
-            android:onClick="onClick"
-            android:src="@drawable/delete_black" />
+            <ImageButton
+                android:id="@+id/btn_submit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:layout_marginRight="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:cropToPadding="false"
+                android:onClick="onClick"
+                android:scaleType="fitCenter"
+                android:src="@drawable/btn_submit" />
+
+            <ImageButton
+                android:id="@+id/btn_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:layout_marginLeft="0dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:cropToPadding="false"
+                android:onClick="onClick"
+                android:scaleType="fitCenter"
+                android:src="@drawable/btn_delete" />
+
+        </LinearLayout>
+
     </RelativeLayout>
 
     <ScrollView
@@ -39,12 +54,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/menu_bar1"
+        android:layout_marginTop="40dp"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@drawable/rule_bg"
             android:orientation="vertical" >
 
             <Button
@@ -54,7 +71,7 @@
                 android:layout_gravity="center"
                 android:onClick="onClick"
                 android:text="AddTime" />
-            
+
             <TextView
                 android:id="@+id/tbx_time"
                 android:layout_width="wrap_content"
@@ -80,7 +97,6 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" >
-
             </RelativeLayout>
 
             <LinearLayout
@@ -110,8 +126,8 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginRight="30dp"
                     android:layout_marginLeft="30dp"
+                    android:layout_marginRight="30dp"
                     android:gravity="center"
                     android:orientation="vertical" >
 
@@ -147,9 +163,7 @@
                         android:text="Active" />
                 </LinearLayout>
             </LinearLayout>
-
         </LinearLayout>
-        
     </ScrollView>
 
 </RelativeLayout>

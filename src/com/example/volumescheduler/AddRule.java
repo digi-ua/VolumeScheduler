@@ -7,12 +7,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -31,6 +33,7 @@ public class AddRule extends Activity {
 	ToggleButton tgl_silent;
 	ToggleButton tgl_active;
 	Button add_rule;
+	ImageButton delete_rule;
 	Button btn_addTime;
 	Button btn_addDays;
 	TextView tbx_vibrate;
@@ -67,6 +70,8 @@ public class AddRule extends Activity {
 		btn_addDays = (Button) findViewById(R.id.btn_addDays);
 		btn_addTime = (Button) findViewById(R.id.btn_addTime);
 		add_rule = (Button) findViewById(R.id.btn_add);
+		delete_rule = (ImageButton) findViewById(R.id.btn_delete);
+		delete_rule.setVisibility(View.INVISIBLE);
 		tgl_vibrate = (ToggleButton) findViewById(R.id.tgl_vibrate);
 		tgl_silent = (ToggleButton) findViewById(R.id.tgl_silent);
 		tgl_active = (ToggleButton) findViewById(R.id.tgl_active);
@@ -80,19 +85,15 @@ public class AddRule extends Activity {
 			getParametrs();
 			switch (Rule) {
 			case 0:
-				tbx_vibrate.setText("Checked");
 				tgl_vibrate.setChecked(true);
 				vRule = 1;
 				break;
 			case 1:
-				tbx_silent.setText("Checked");
 				tgl_silent.setChecked(true);
 				sRule = 1;
 				break;
 			case 2:
-				tbx_vibrate.setText("Checked");
 				tgl_vibrate.setChecked(true);
-				tbx_silent.setText("Checked");
 				tgl_silent.setChecked(true);
 				sRule = 1;
 				vRule = 1;
@@ -104,7 +105,7 @@ public class AddRule extends Activity {
 			tgl_active.setChecked(Active == 1 ? true : false);
 			btn_addDays.setText(R.string.btn_days_edit);
 			btn_addTime.setText(R.string.btn_time_edit);
-			
+			delete_rule.setVisibility(View.VISIBLE);
 			tbxTimeUpdate();
 			tbx_days.setText(Days);
 		}
@@ -162,7 +163,6 @@ public class AddRule extends Activity {
 			else {
 				getApplicationContext().sendBroadcast(new Intent(MainActivity.ACTION_RULELIST_UPDATE));
 				this.finish();
-				// this.finish();
 			}
 			break;
 
@@ -237,11 +237,11 @@ public class AddRule extends Activity {
 		timeS.setIs24HourView(DateFormat.is24HourFormat(this));
 		timeE.setIs24HourView(DateFormat.is24HourFormat(this));
 		
-		timeS.setCurrentHour(S_HOUR);
-		timeS.setCurrentMinute(S_MIN);
+		timeS.setCurrentHour(s_hour = S_HOUR);
+		timeS.setCurrentMinute(s_min = S_MIN);
 
-		timeE.setCurrentHour(E_HOUR);
-		timeE.setCurrentMinute(E_MIN);
+		timeE.setCurrentHour(e_hour = E_HOUR);
+		timeE.setCurrentMinute(e_min = E_MIN);
 
 		timeS.setOnTimeChangedListener(new OnTimeChangedListener() {
 
@@ -272,8 +272,8 @@ public class AddRule extends Activity {
 				S_MIN = s_min;
 				E_HOUR = e_hour;
 				E_MIN = e_min;
-				time.setText(s_hour + ":" + s_min + " - " + e_hour + ":"
-						+ e_min);
+				//time.setText(s_hour + ":" + s_min + " - " + e_hour + ":"
+						//+ e_min);
 				tbxTimeUpdate();
 			}
 		});
@@ -323,4 +323,6 @@ public class AddRule extends Activity {
 			rule.Rule = 0;
 		return rule;
 	}
+	
+	
 }
