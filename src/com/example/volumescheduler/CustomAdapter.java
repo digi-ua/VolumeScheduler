@@ -194,6 +194,9 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 							}
 
 							mng.CreateOrUdateRule(model, activity);
+							MainActivity mainActivity = (MainActivity) activity;
+							mainActivity.Service();
+							
 						}
 					});
 

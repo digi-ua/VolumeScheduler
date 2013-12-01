@@ -2,7 +2,6 @@ package com.example.volumescheduler;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.content.BroadcastReceiver;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -154,6 +153,7 @@ public class AddRule extends Activity {
 				Toast.makeText(this, "Invalid data", Toast.LENGTH_SHORT).show();
 			else {
 				getApplicationContext().sendBroadcast(new Intent(MainActivity.ACTION_RULELIST_UPDATE));
+				Service();
 				this.finish();
 			}
 			break;
@@ -162,6 +162,7 @@ public class AddRule extends Activity {
 				Toast.makeText(this, "Exeption", Toast.LENGTH_SHORT).show();
 			else {
 				getApplicationContext().sendBroadcast(new Intent(MainActivity.ACTION_RULELIST_UPDATE));
+				Service();
 				this.finish();
 			}
 			break;
@@ -208,14 +209,10 @@ public class AddRule extends Activity {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				Days = "";
 				SparseBooleanArray array = lv.getCheckedItemPositions();
-				// int count = lv.getCheckedItemCount();
-
 				for (int i = 0; i < 7; i++) {
-					boolean val = array.valueAt(i);
 					if (array.valueAt(i))
 						Days += days_name[array.keyAt(i)] + " ";
 				}
-				String str = Days;
 				tbx_days.setText(Days);
 			}
 		});
@@ -322,6 +319,14 @@ public class AddRule extends Activity {
 		else
 			rule.Rule = 0;
 		return rule;
+	}
+	
+	public void Service() {
+		stopService(new Intent(this, MainService.class));
+		Log.d("MainActivity", "-- Service is started --");
+		Log.d("------", "-------");
+		Log.d("------", "-------");
+		startService(new Intent(this, MainService.class));
 	}
 	
 	

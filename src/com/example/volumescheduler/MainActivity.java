@@ -44,23 +44,27 @@ public class MainActivity extends Activity {
 		intentFilter.addAction(ACTION_RULELIST_UPDATE);
 		registerReceiver(broadcastReceiver, intentFilter);
 
-		// onDebilClick(); // test service function
-
 		list = (ListView) findViewById(R.id.list);
 		/******** Take some data in Arraylist ( CustomListViewValuesArr ) ***********/
 		
+		
+		//add new object to database !  Troubles with service if no rules or nothing is no active
+		mng.CreateOrUdateRule(new RuleModel(0, 1, 2, "Sun", 1, 1), this); 
+		
 		FromDBtoList();
-
 		/**************** Create Custom Adapter *********/
-
+		
 		adapter = new CustomAdapter(this, CustomListViewValuesArr);
-
+		
 		Log.d("MainActivity_OnCreate", "CustomAdaper is created -- Size: "
 				+ adapter.getCount());
 		Log.d("------", "-------");
 		Log.d("------", "-------");
 
 		list.setAdapter(adapter);
+		
+		Service();
+		
 	}
 
 	@Override
@@ -121,33 +125,12 @@ public class MainActivity extends Activity {
 
 	}
 
-	public void onDebilClick() {
-		RuleModel tt = new RuleModel();
-		tt.ID = 0;
-		tt.StartTime = 275;
-		tt.EndTime = 278;
-		tt.Days = "Sun Mon Tue Wed Thu Fri Sat";
-		tt.State = 0;
-		tt.Rule = 1;
-		tt.IsRunning = 0;
-		tt.Active = 1;
-
+	public void Service() {
 		stopService(new Intent(this, MainService.class));
-		// Log.d(LOG_TAG, "stop service");
-
+		Log.d("MainActivity", "-- Service is started --");
+		Log.d("------", "-------");
+		Log.d("------", "-------");
 		startService(new Intent(this, MainService.class));
-
-		// db.Save(tt);
-
-		// List<RuleModel> ttList = db.getAll();
-		// db.close();
-		// for (final RuleModel rm : ttList){
-		// Log.d("LOG", "id=" + rm.ID + " sTime=" + rm.StartTime + " eTime=" +
-		// rm.EndTime + " rule=" + rm.Rule);
-		// }
-
-		// stopService(new Intent(this, MainService.class));
-		// startService(new Intent(this, MainService.class));
 	}
 
 }
