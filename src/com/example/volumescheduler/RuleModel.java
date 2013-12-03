@@ -81,19 +81,19 @@ public class RuleModel {
 	
 		for (String day : d) {
 			if (day.equals("Sun"))
-				res.add(0);
-			else if (day.equals("Mon"))
 				res.add(1);
-			else if (day.equals("Tue"))
+			else if (day.equals("Mon"))
 				res.add(2);
-			else if (day.equals("Wed"))
+			else if (day.equals("Tue"))
 				res.add(3);
-			else if (day.equals("Thu"))
+			else if (day.equals("Wed"))
 				res.add(4);
-			else if (day.equals("Fri"))
+			else if (day.equals("Thu"))
 				res.add(5);
-			else if (day.equals("Sat"))
+			else if (day.equals("Fri"))
 				res.add(6);
+			else if (day.equals("Sat"))
+				res.add(7);
 		}
 
 		return res;

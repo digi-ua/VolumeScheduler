@@ -16,7 +16,8 @@ import android.util.Log;
 
 public class MainService extends Service {
 	ExecutorService es;
-	final String LOG_TAG = "myLogs";
+	final static String LOG_TAG = "MainService: ";
+	final static int minOfDay = 1440;
 
 	public void onCreate() {
 		super.onCreate();
@@ -25,13 +26,14 @@ public class MainService extends Service {
 
 	public void onDestroy() {
 		Log.d(LOG_TAG, "MainService onDestroy");
+		es.shutdown();
 		super.onDestroy();
 	}
 
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.d(LOG_TAG, "MainService 1 - onStart");
-		MainRun mr = new MainRun();
-		es.execute(mr);
+		Run service = new Run();
+		es.execute(service);
 		return super.onStartCommand(intent, flags, startId);
 	}
 
@@ -39,64 +41,76 @@ public class MainService extends Service {
 		return null;
 	}
 
-	class MainRun implements Runnable {
-
-		Time next_time;
-		Time curr_time;
-		int curr_rule;
-		RuleModel currentRuleModel;
+	class Run implements Runnable {
 
 		DBHelper db = null;
-		List<RuleModel> ttList = null;
 
-		public MainRun() {
-		}
+		public Run() {}
 
 		public void run() {
 			try {
 				db = new DBHelper(MainService.this);
-				ttList = db.getAll();
-
-				Log.d(LOG_TAG, "MainService db size: " + ttList.size());
-
-				curr_time = GetCurrentTime();
-				currentRuleModel = GetCurrentRule(curr_time);
-				if (currentRuleModel != null) {
-					SetRule(currentRuleModel.Rule);
-					next_time = GetEndRuleTime(currentRuleModel);
-				} else {
-					next_time = GetNextRuleTime(curr_time);
-				}
-
+				List<RuleModel> todayRules = null;
 				while (true) {
-					curr_time = GetCurrentTime();
-					int sub = Time.compare(curr_time, next_time);
-					Log.d(LOG_TAG, "MainService sub: " + sub + " " + curr_time
-							+ " " + next_time);
-					if (sub > 0) {
-						// if(currentRuleModel != null){
-						// SetRule(currentRuleModel.State);
-						// }
+					int indexOfLast = 0;
+					todayRules = GetTodayRules(db.getAll());
 
-						currentRuleModel = GetCurrentRule(curr_time);
+					if (todayRules != null) {
+						for (int i = 0; i < todayRules.size(); i++) {
+							int state_ = GetRingerMode();
+							
+							TimeUnit.MILLISECONDS.sleep((todayRules.get(i).StartTime * 60000) - GetMiliseconds(GetCurrentTime()));
+					
+							SetRule(todayRules.get(i).Rule);
+							
+							TimeUnit.MILLISECONDS.sleep((todayRules.get(i).EndTime * 60000) - GetMiliseconds(GetCurrentTime()));
 
-						if (currentRuleModel != null) {
-							SetRule(currentRuleModel.Rule);
-							next_time = GetEndRuleTime(currentRuleModel);
-						} else {
-							next_time = GetNextRuleTime(curr_time);
+							SetRule(state_);
+
+							indexOfLast = i;
 						}
-					}
-					TimeUnit.SECONDS.sleep(20);
-					if (currentRuleModel != null) {
-						currentRuleModel.State = GetRingerMode();
-						db.Save(currentRuleModel);
-					}
-
+						TimeUnit.MINUTES.sleep(minOfDay - todayRules.get(indexOfLast).EndTime);
+					} else 
+						TimeUnit.MINUTES.sleep(minOfDay - GetMinutes(GetCurrentTime()));
 				}
+
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+		}
+
+		private List<RuleModel> GetTodayRules(List<RuleModel> allRules) {
+			Time currentTime = GetCurrentTime();
+			List<RuleModel> todayRules = new ArrayList<RuleModel>();
+			for (RuleModel rule : allRules) {
+				List<Integer> days = rule.parseDays();
+				for (int day : days) {
+					int currTime = GetMinutes(currentTime);
+					if (day == currentTime.weekDay && rule.EndTime > currTime && rule.Active == 1 ) {
+						todayRules.add(rule);
+					}
+				}
+			}
+			return sortTodayRules(todayRules);
+
+		}
+
+		private List<RuleModel> sortTodayRules(List<RuleModel> todayRules) {
+
+			if (todayRules.size() == 0)
+				return null;
+			RuleModel helperRule = todayRules.get(0);
+
+			for (int i = 1; i < todayRules.size(); i++) {
+				if (todayRules.get(i - 1).StartTime > todayRules.get(i).StartTime) {
+					helperRule = todayRules.get(i);
+					todayRules.set(i, todayRules.get(i - 1));
+					todayRules.set(i - 1, helperRule);
+				}
+			}
+
+			return todayRules;
+
 		}
 
 		private Time GetCurrentTime() {
@@ -104,22 +118,32 @@ public class MainService extends Service {
 			Time t = new Time();
 			t.hour = cl.get(Calendar.HOUR_OF_DAY);
 			t.minute = cl.get(Calendar.MINUTE);
+			t.second = cl.get(Calendar.SECOND);
 			t.weekDay = cl.get(Calendar.DAY_OF_WEEK);
+			
+
 			return t;
 		}
 
+		private long GetMiliseconds(Time time){
+			return (time.hour * 3600 + time.minute * 60 + time.second) * 1000;
+		}
+		
+		private int GetMinutes(Time time){
+			return time.hour * 60 + time.minute;
+		}
+		
 		private void SetRule(int rule) {
-			Log.d(LOG_TAG, "MainService set rule mode: " + rule);
 			AudioManager aManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 			switch (rule) {
 			case AudioManager.RINGER_MODE_NORMAL:
-				aManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
-				break;
-			case AudioManager.RINGER_MODE_VIBRATE:
 				aManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 				break;
-			case AudioManager.RINGER_MODE_SILENT:
+			case AudioManager.RINGER_MODE_VIBRATE:
 				aManager.setRingerMode(AudioManager.RINGER_MODE_VIBRATE);
+				break;
+			case AudioManager.RINGER_MODE_SILENT:
+				aManager.setRingerMode(AudioManager.RINGER_MODE_SILENT);
 				break;
 
 			}
@@ -128,91 +152,6 @@ public class MainService extends Service {
 		private int GetRingerMode() {
 			AudioManager aManager = (AudioManager) getSystemService(AUDIO_SERVICE);
 			return aManager.getRingerMode();
-		}
-
-		private RuleModel GetCurrentRule(Time t) {
-			int minOfDay = t.minute + t.hour * 60;
-			int day = t.weekDay;
-			int min = Integer.MAX_VALUE;
-
-			List<Integer> rdays = new ArrayList<Integer>();
-			RuleModel res = null;
-
-			for (final RuleModel tt : ttList) {
-
-				rdays = tt.parseDays();
-				int rday = -1;
-
-				for (int i = 0; i < rdays.size(); i++) {
-					if (rdays.get(i) == day) {
-						rday = day;
-						break;
-					}
-				}
-
-				if ((tt.Active == 1) && (rday != -1)) {
-					if ((minOfDay >= tt.StartTime)
-							&& (minOfDay - tt.StartTime < min)) {
-						min = minOfDay - tt.StartTime;
-						res = tt;
-					}
-				}
-			}
-
-			if (min < Integer.MAX_VALUE) {
-				if (res.EndTime - minOfDay > 0) {
-					return res;
-				}
-			}
-			return null;
-
-		}
-
-		private Time GetNextRuleTime(Time t) {
-			int minOfDay = t.minute + t.hour * 60;
-			int day = t.weekDay;
-			int min = Integer.MAX_VALUE;
-
-			List<Integer> rdays = new ArrayList<Integer>();
-			RuleModel res = null;
-
-			for (final RuleModel tt : ttList) {
-
-				rdays = tt.parseDays();
-				int rday = -1;
-				for (int i = 0; i < rdays.size(); i++) {
-					if (rdays.get(i) == day) {
-						rday = day;
-						break;
-					}
-				}
-
-				if ((tt.Active == 1) && (rday != -1)) {
-					if ((tt.StartTime >= minOfDay)
-							&& (tt.StartTime - minOfDay < min)) {
-						min = tt.StartTime - minOfDay;
-						res = tt;
-					}
-				}
-			}
-			if (min != Integer.MAX_VALUE) {
-				t.hour = res.StartTime / 60;
-				t.minute = res.StartTime % 60;
-				return t;
-			}
-
-			t.weekDay += 8;
-			t.weekDay = t.weekDay % 7;
-			t.hour = 0;
-			t.minute = 0;
-			return GetNextRuleTime(t);
-		}
-
-		private Time GetEndRuleTime(RuleModel rm) {
-			Time t = GetCurrentTime();
-			t.hour = rm.EndTime / 60;
-			t.minute = rm.EndTime % 60;
-			return t;
 		}
 
 	}

@@ -22,9 +22,9 @@ public class Manager {
 						Log.d("Mode", "Create -- Day:" + i);
 						Log.d("------", "-------");
 						Log.d("------", "-------");
-						if ((ruleModel.StartTime >= rm.StartTime && ruleModel.StartTime <= rm.EndTime)
-								|| (ruleModel.EndTime >= rm.StartTime && ruleModel.EndTime <= rm.EndTime)
-								|| (ruleModel.StartTime <= rm.StartTime && ruleModel.EndTime >= rm.StartTime))
+						if ((ruleModel.StartTime >= rm.StartTime && ruleModel.StartTime < rm.EndTime)
+								|| (ruleModel.EndTime > rm.StartTime && ruleModel.EndTime <= rm.EndTime)
+								|| (ruleModel.StartTime <= rm.StartTime && ruleModel.EndTime > rm.StartTime))
 							return false;
 					} else {
 						Log.d("Mode", "Edited -- Day: " + i);

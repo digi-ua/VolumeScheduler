@@ -49,7 +49,7 @@ public class MainActivity extends Activity {
 		
 		
 		//add new object to database !  Troubles with service if no rules or nothing is no active
-		mng.CreateOrUdateRule(new RuleModel(0, 1, 2, "Sun", 1, 1), this); 
+		//mng.CreateOrUdateRule(new RuleModel(0, 1, 2, "Sun", 1, 1), this); 
 		
 		FromDBtoList();
 		/**************** Create Custom Adapter *********/
@@ -73,6 +73,7 @@ public class MainActivity extends Activity {
 		Log.d("------", "-------");
 		Log.d("------", "-------");
 		unregisterReceiver(broadcastReceiver);
+		
 		super.onDestroy();
 	}
 

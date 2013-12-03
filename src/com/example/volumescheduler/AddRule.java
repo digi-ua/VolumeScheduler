@@ -29,14 +29,12 @@ public class AddRule extends Activity {
 
 	ListView list;
 	ToggleButton tgl_vibrate;
-	ToggleButton tgl_silent;
 	ToggleButton tgl_active;
 	Button add_rule;
 	ImageButton delete_rule;
 	Button btn_addTime;
 	Button btn_addDays;
 	TextView tbx_vibrate;
-	TextView tbx_silent;
 	TextView tbx_active;
 	TextView time;
 	TextView tbx_days;
@@ -47,7 +45,7 @@ public class AddRule extends Activity {
 	private int E_HOUR = 0;
 	private int E_MIN = 0;
 	private int Rule;
-	private int vRule = 0, sRule = 0;
+	private int vRule = 0;
 	private String Days = "";
 	private int State;
 	private int IsRunning;
@@ -72,34 +70,18 @@ public class AddRule extends Activity {
 		delete_rule = (ImageButton) findViewById(R.id.btn_delete);
 		delete_rule.setVisibility(View.INVISIBLE);
 		tgl_vibrate = (ToggleButton) findViewById(R.id.tgl_vibrate);
-		tgl_silent = (ToggleButton) findViewById(R.id.tgl_silent);
 		tgl_active = (ToggleButton) findViewById(R.id.tgl_active);
 		tbx_vibrate = (TextView) findViewById(R.id.tbx_vibrate);
-		tbx_silent = (TextView) findViewById(R.id.tbx_silent);
 		tbx_active = (TextView) findViewById(R.id.tbx_active);
 		time = (TextView) findViewById(R.id.tbx_time);
 		tbx_days = (TextView) findViewById(R.id.tbx_rule_days);
 
 		if (MODE == 2) {
 			getParametrs();
-			switch (Rule) {
-			case 0:
+			if(Rule == 1)
+			{
 				tgl_vibrate.setChecked(true);
 				vRule = 1;
-				break;
-			case 1:
-				tgl_silent.setChecked(true);
-				sRule = 1;
-				break;
-			case 2:
-				tgl_vibrate.setChecked(true);
-				tgl_silent.setChecked(true);
-				sRule = 1;
-				vRule = 1;
-				break;
-
-			default:
-				break;
 			}
 			tgl_active.setChecked(Active == 1 ? true : false);
 			btn_addDays.setText(R.string.btn_days_edit);
@@ -116,16 +98,6 @@ public class AddRule extends Activity {
 							boolean isChecked) {
 
 						vRule = isChecked ? 1 : 0;
-					}
-				});
-		tgl_silent
-				.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-					@Override
-					public void onCheckedChanged(CompoundButton silent,
-							boolean isChecked) {
-
-						sRule = isChecked ? 1 : 0;
 					}
 				});
 		tgl_active
@@ -310,14 +282,7 @@ public class AddRule extends Activity {
 		rule.State = State;
 		rule.IsRunning = IsRunning;
 		rule.Active = Active;
-		if (vRule == 1 && sRule == 0)
-			rule.Rule = 0;
-		else if (vRule == 0 && sRule == 1)
-			rule.Rule = 1;
-		else if (vRule == 1 && sRule == 1)
-			rule.Rule = 2;
-		else
-			rule.Rule = 0;
+		rule.Rule = vRule == 1 ? 1: 0;
 		return rule;
 	}
 	

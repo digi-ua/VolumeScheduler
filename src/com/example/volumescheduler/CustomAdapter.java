@@ -63,7 +63,6 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 		public TextView tbx_rule_end_time;
 		public TextView tbx_rule_days;
 		public TextView tbx_rule_vibrate;
-		public TextView tbx_rule_silent;
 		public CheckBox cbx_rule_active;
 	}
 
@@ -91,8 +90,6 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 					.findViewById(R.id.cbx_rule_active);
 			holder.tbx_rule_vibrate = (TextView) convertView
 					.findViewById(R.id.tbx_ruleVibrate);
-			holder.tbx_rule_silent = (TextView) convertView
-					.findViewById(R.id.tbx_ruleSilent);
 
 			/************ Set holder with LayoutInflater ************/
 			convertView.setTag(holder);
@@ -106,7 +103,6 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 			holder.tbx_rule_start_time.setText("None");
 			holder.tbx_rule_end_time.setText("None");
 			holder.tbx_rule_vibrate.setText("None");
-			holder.tbx_rule_silent.setText("None");
 			holder.cbx_rule_active.setChecked(false);
 			holder.cbx_rule_active.setEnabled(false);
 
@@ -132,17 +128,11 @@ public class CustomAdapter extends BaseAdapter implements OnClickListener {
 				}
 
 			switch (tempValues.Rule) {
-			case 0:
-				holder.tbx_rule_vibrate.setText("On");
-				holder.tbx_rule_silent.setText("Off");
-				break;
 			case 1:
-				holder.tbx_rule_vibrate.setText("Off");
-				holder.tbx_rule_silent.setText("On");
-				break;
-			case 2:
 				holder.tbx_rule_vibrate.setText("On");
-				holder.tbx_rule_silent.setText("On");
+				break;
+			case 0:
+				holder.tbx_rule_vibrate.setText("Off");
 				break;
 			default:
 				break;
