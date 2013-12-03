@@ -32,7 +32,8 @@ public class AddRule extends Activity {
 	ToggleButton tgl_active;
 	Button add_rule;
 	ImageButton delete_rule;
-	Button btn_addTime;
+	Button btn_addSTime;
+	Button btn_addETime;
 	Button btn_addDays;
 	TextView tbx_vibrate;
 	TextView tbx_active;
@@ -65,7 +66,8 @@ public class AddRule extends Activity {
 		MODE = getIntent().getIntExtra("MODE", 1);
 
 		btn_addDays = (Button) findViewById(R.id.btn_addDays);
-		btn_addTime = (Button) findViewById(R.id.btn_addTime);
+		btn_addSTime = (Button) findViewById(R.id.btn_addSTime);
+		btn_addETime = (Button) findViewById(R.id.btn_addETime);
 		add_rule = (Button) findViewById(R.id.btn_add);
 		delete_rule = (ImageButton) findViewById(R.id.btn_delete);
 		delete_rule.setVisibility(View.INVISIBLE);
@@ -85,7 +87,8 @@ public class AddRule extends Activity {
 			}
 			tgl_active.setChecked(Active == 1 ? true : false);
 			btn_addDays.setText(R.string.btn_days_edit);
-			btn_addTime.setText(R.string.btn_time_edit);
+			btn_addSTime.setText(R.string.btn_Stime_edit);
+			btn_addETime.setText(R.string.btn_Etime_edit);
 			delete_rule.setVisibility(View.VISIBLE);
 			tbxTimeUpdate();
 			tbx_days.setText(Days);
@@ -114,8 +117,11 @@ public class AddRule extends Activity {
 
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.btn_addTime:
-			showDlgTime();
+		case R.id.btn_addSTime:
+			showDlgSTime();
+			break;
+		case R.id.btn_addETime:
+			showDlgETime();
 			break;
 		case R.id.btn_addDays:
 			showDlgDays();
@@ -192,42 +198,65 @@ public class AddRule extends Activity {
 		builder.create().show();
 	}
 
-	public void showDlgTime() {
+	public void showDlgETime()
+	{
 		AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-		builder.setTitle("Set time:");
+		builder.setTitle("Set end time:");
 
 		LayoutInflater inflator = LayoutInflater.from(this);
 		View content = inflator.inflate(R.layout.activity_add_time, null);
-
-		TimePicker timeS = (TimePicker) content.findViewById(R.id.timePickerS);
-		TimePicker timeE = (TimePicker) content.findViewById(R.id.timePickerE);
 		
-		timeS.setIs24HourView(DateFormat.is24HourFormat(this));
-		timeE.setIs24HourView(DateFormat.is24HourFormat(this));
+		TimePicker time = (TimePicker) content.findViewById(R.id.timePicker);
 		
-		timeS.setCurrentHour(s_hour = S_HOUR);
-		timeS.setCurrentMinute(s_min = S_MIN);
-
-		timeE.setCurrentHour(e_hour = E_HOUR);
-		timeE.setCurrentMinute(e_min = E_MIN);
-
-		timeS.setOnTimeChangedListener(new OnTimeChangedListener() {
-
-			@Override
-			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
-				s_hour = hourOfDay;
-				s_min = minute;
-
-			}
-		});
-
-		timeE.setOnTimeChangedListener(new OnTimeChangedListener() {
+		time.setIs24HourView(DateFormat.is24HourFormat(this));
+		
+		time.setCurrentHour(e_hour = E_HOUR);
+		time.setCurrentMinute(e_min = E_MIN);
+		
+		time.setOnTimeChangedListener(new OnTimeChangedListener() {
 
 			@Override
 			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
 				e_hour = hourOfDay;
 				e_min = minute;
+			}
+		});
+		
+		builder.setView(content).setNegativeButton("Cancel", null);
+
+		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+			@Override
+			public void onClick(DialogInterface dialog, int whichButton) {
+				E_HOUR = e_hour;
+				E_MIN = e_min;
+				tbxTimeUpdate();
+			}
+		});
+
+		builder.create().show();
+	}
+	public void showDlgSTime() {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+		builder.setTitle("Set start time:");
+
+		LayoutInflater inflator = LayoutInflater.from(this);
+		View content = inflator.inflate(R.layout.activity_add_time, null);
+
+		TimePicker time = (TimePicker) content.findViewById(R.id.timePicker);
+		
+		time.setIs24HourView(DateFormat.is24HourFormat(this));
+		
+		time.setCurrentHour(s_hour = S_HOUR);
+		time.setCurrentMinute(s_min = S_MIN);
+
+		time.setOnTimeChangedListener(new OnTimeChangedListener() {
+
+			@Override
+			public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+				s_hour = hourOfDay;
+				s_min = minute;
 
 			}
 		});
@@ -239,10 +268,6 @@ public class AddRule extends Activity {
 			public void onClick(DialogInterface dialog, int whichButton) {
 				S_HOUR = s_hour;
 				S_MIN = s_min;
-				E_HOUR = e_hour;
-				E_MIN = e_min;
-				//time.setText(s_hour + ":" + s_min + " - " + e_hour + ":"
-						//+ e_min);
 				tbxTimeUpdate();
 			}
 		});

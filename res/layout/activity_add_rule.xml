@@ -65,19 +65,25 @@
             android:orientation="vertical" >
 
             <Button
-                android:id="@+id/btn_addTime"
+                android:id="@+id/btn_addSTime"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="onClick"
-                android:text="AddTime" />
+                android:text="@string/btn_Stime_add" />
+
+            <Button
+                android:id="@+id/btn_addETime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onClick"
+                android:text="@string/btn_Etime_add" />
 
             <TextView
                 android:id="@+id/tbx_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Time" />
+                android:layout_gravity="center" />
 
             <Button
                 android:id="@+id/btn_addDays"
@@ -85,14 +91,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:onClick="onClick"
-                android:text="AddDays" />
+                android:text="@string/btn_days_add" />
 
             <TextView
                 android:id="@+id/tbx_rule_days"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Days" />
+                android:layout_gravity="center" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -121,7 +126,7 @@
                         android:id="@+id/tbx_vibrate"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Vibrate" />
+                        android:text="@string/tgl_vibrate" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -141,7 +146,7 @@
                         android:id="@+id/tbx_active"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Active" />
+                        android:text="@string/tgl_active" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

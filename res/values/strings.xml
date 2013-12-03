@@ -5,10 +5,14 @@
     <string name="start">Start service</string>
     <string name="stop">Stop service</string>
     
-    <string name="btn_time_add">Add Time</string>
-    <string name="btn_time_edit">Edit Time</string>
+    <string name="btn_Stime_add">Add Start Time</string>
+    <string name="btn_Stime_edit">Edit Start Time</string>
+     <string name="btn_Etime_add">Add End Time</string>
+    <string name="btn_Etime_edit">Edit End Time</string>
     <string name="btn_days_add">Add Days</string>
     <string name="btn_days_edit">Edit Days</string>
     <string name="add_title">Add Rule</string>
+    <string name="tgl_vibrate">Vibrate</string>
+    <string name="tgl_active">Active</string>
 
 </resources>

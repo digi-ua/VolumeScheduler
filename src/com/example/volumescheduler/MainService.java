@@ -57,7 +57,16 @@ public class MainService extends Service {
 
 					if (todayRules != null) {
 						for (int i = 0; i < todayRules.size(); i++) {
-							int state_ = GetRingerMode();
+							if(GetMinutes(GetCurrentTime()) >= todayRules.get(i).StartTime)
+							{
+								todayRules.get(i).State = 2;
+								db.Save(todayRules.get(i));
+							}
+							else 
+								{
+									todayRules.get(i).State = GetRingerMode();
+									db.Save(todayRules.get(i));
+								}
 							
 							TimeUnit.MILLISECONDS.sleep((todayRules.get(i).StartTime * 60000) - GetMiliseconds(GetCurrentTime()));
 					
@@ -65,7 +74,7 @@ public class MainService extends Service {
 							
 							TimeUnit.MILLISECONDS.sleep((todayRules.get(i).EndTime * 60000) - GetMiliseconds(GetCurrentTime()));
 
-							SetRule(state_);
+							SetRule(todayRules.get(i).State);
 
 							indexOfLast = i;
 						}
