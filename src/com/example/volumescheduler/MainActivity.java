@@ -25,7 +25,7 @@ public class MainActivity extends Activity {
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 
 		@Override
-		public void onReceive(Context arg0, Intent arg1) {
+		public void onReceive(Context context, Intent intent) {
 			Log.d("------", "-------");
 			Log.d("------", "-------");
 			Log.d("Receiver", "onReceive");
@@ -33,6 +33,16 @@ public class MainActivity extends Activity {
 			list.setAdapter(adapter);
 
 		}
+	};
+	
+	private BroadcastReceiver broRecAutoRun = new BroadcastReceiver() {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			Log.d("Autorun: ", "onReceive " + intent.getAction());
+		    context.startService(new Intent(context, MainService.class));
+		}
+		
 	};
 
 	@Override
@@ -127,7 +137,7 @@ public class MainActivity extends Activity {
 	}
 
 	public void Service() {
-		stopService(new Intent(this, MainService.class));
+		//stopService(new Intent(this, MainService.class));
 		Log.d("MainActivity", "-- Service is started --");
 		Log.d("------", "-------");
 		Log.d("------", "-------");

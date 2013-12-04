@@ -26,7 +26,7 @@ public class MainService extends Service {
 
 	public void onDestroy() {
 		Log.d(LOG_TAG, "MainService onDestroy");
-		es.shutdown();
+		//es.shutdown();
 		super.onDestroy();
 	}
 
@@ -67,20 +67,26 @@ public class MainService extends Service {
 									todayRules.get(i).State = GetRingerMode();
 									db.Save(todayRules.get(i));
 								}
-							
+							Log.d("Sleep before rule:", "Time: " + GetCurrentTimeString(GetCurrentTime()));
 							TimeUnit.MILLISECONDS.sleep((todayRules.get(i).StartTime * 60000) - GetMiliseconds(GetCurrentTime()));
-					
-							SetRule(todayRules.get(i).Rule);
 							
+							Log.d("Set rule:", "Time:" + GetCurrentTimeString(GetCurrentTime()));
+							SetRule(todayRules.get(i).Rule);
+							Log.d("Sleep start:", "Time: " + GetCurrentTimeString(GetCurrentTime()));
 							TimeUnit.MILLISECONDS.sleep((todayRules.get(i).EndTime * 60000) - GetMiliseconds(GetCurrentTime()));
-
+							Log.d("Sleep end:", "Time: " + GetCurrentTimeString(GetCurrentTime()));
+							Log.d("Set prev rule:", "Time: " + GetCurrentTimeString(GetCurrentTime()));
 							SetRule(todayRules.get(i).State);
 
 							indexOfLast = i;
 						}
+						Log.d("Next rule:", "Time: " + (minOfDay - todayRules.get(indexOfLast).EndTime));
 						TimeUnit.MINUTES.sleep(minOfDay - todayRules.get(indexOfLast).EndTime);
 					} else 
+					{
+						Log.d("Next day:", "Time: " + (minOfDay - GetMinutes(GetCurrentTime())));
 						TimeUnit.MINUTES.sleep(minOfDay - GetMinutes(GetCurrentTime()));
+					}
 				}
 
 			} catch (InterruptedException e) {
@@ -129,9 +135,17 @@ public class MainService extends Service {
 			t.minute = cl.get(Calendar.MINUTE);
 			t.second = cl.get(Calendar.SECOND);
 			t.weekDay = cl.get(Calendar.DAY_OF_WEEK);
-			
-
 			return t;
+		}
+		
+		private String GetCurrentTimeString(Time time)
+		{
+			long miliseconds = GetMiliseconds(time) % 1000;
+			int seconds = time.second;
+			int hours = time.hour;
+			int minutes = time.minute;
+			
+			return "Hour: " + hours + " Min: " + minutes + " Sec: " + seconds + " Mili: " + miliseconds ;
 		}
 
 		private long GetMiliseconds(Time time){
